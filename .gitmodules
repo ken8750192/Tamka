@@ -1,0 +1,6 @@
+[submodule "templates/molajo-construct"]
+	path = templates/molajo-construct
+	url = git@github.com:betweenbrain/Molajo-Construct.git
+[submodule "templates/test-template"]
+	path = templates/test-template
+	url = git@github.com:betweenbrain/Test-Template.git
