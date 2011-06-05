@@ -104,7 +104,7 @@ class MolajoFieldCatid extends MolajoField
             $render['checkbox'] = false;
             $render['data_type'] = 'string';
             $render['column_name'] = 'catid';
-            $render['print_value'] = $this->escape($item->category_title);
+            $render['print_value'] = $item->category_id;
 
             return $render;
         }

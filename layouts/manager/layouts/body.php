@@ -26,12 +26,14 @@ for ($i=1; $i < 1000; $i++) {
 
             /** custom field rendering **/
             $fieldClassName = 'MolajoField'.ucfirst($this->tempColumnName);
-            MolajoField::requireFieldClassFile ($this->tempColumnName, false);
+            $mf = new MolajoField ();
+            $mf->requireFieldClassFile ($this->tempColumnName, false);
 
             if (class_exists($fieldClassName)) {
                 $MolajoFieldClass = new $fieldClassName();
                 if (method_exists($MolajoFieldClass, 'render')) {
-                    $results = $MolajoFieldClass::render ($layout='admin', $this->row, $this->row->rowCount);
+                    $mfc = new $MolajoFieldClass ();
+                    $results = $mfc->render ($layout='admin', $this->row, $this->row->rowCount);
                     if ($results == false) {
                     } else {
                         $this->render = $results;

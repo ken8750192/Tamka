@@ -371,7 +371,8 @@ class JoomlaACL extends ACL
         $query->select('ag.title AS access_level');
 
         $aclClass = ucfirst(strtolower(JRequest::getVar('default_view'))).'ACL';
-        $groupList = $aclClass::getList('Userviewgroups');
+        $acl = new $aclClass();
+        $groupList = $acl->getList('Userviewgroups');
 
         $query->where('a.access in ('.$groupList.')');
         $query->join('LEFT', '#__viewlevels AS ag ON a.access = ag.id');

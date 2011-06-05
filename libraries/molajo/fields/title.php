@@ -118,10 +118,10 @@ class MolajoFieldTitle extends MolajoField
 
             if ($item->canEdit === true) {
                 $render['link_value'] = 'index.php?option='.JRequest::getVar('option').'&task=edit&id='.$item->id;
-                $render['print_value'] = $this->escape($item->title);
+                $render['print_value'] = $item->title;
             } else {
                 $render['link_value'] = false;
-                $render['print_value'] = $this->escape($item->title);
+                $render['print_value'] = $item->title;
             }
 
             return $render;

@@ -111,7 +111,7 @@ class MolajoFieldAlias extends MolajoField
             $render['checkbox'] = false;
             $render['data_type'] = 'string';
             $render['column_name'] = 'alias';
-            $render['print_value'] = $this->escape($item->alias);
+            $render['print_value'] = $item->alias;
 
             return $render;
         }

@@ -67,18 +67,19 @@ for ($i=1; $i < 1000; $i++) {
         $fieldClassName = 'MolajoField'.ucfirst($this->tempColumnName);
 
         /** class file **/
-        MolajoField::requireFieldClassFile ($this->tempColumnName);
+        $mf = new MolajoField ();
+        $mf->requireFieldClassFile ($this->tempColumnName);
 
         /** class instantiation **/
         if (class_exists($fieldClassName)) {
-            $MolajoField = new $fieldClassName();
+            $fcn = new $fieldClassName();
         } else {
             JFactory::getApplication()->enqueueMessage(JText::_('MOLAJO_INVALID_FIELD_CLASS').' '.$fieldClassName, 'error');
             return false;
         }
 
         /** option array values **/
-        $this->tempArray = $MolajoField->getOptions();
+        $this->tempArray = $fcn->getOptions();
 
         /** selected value **/
         $this->tempSelected = $this->queryState->get('filter.'.$this->tempColumnName);

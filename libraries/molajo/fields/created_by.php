@@ -109,7 +109,7 @@ class MolajoFieldCreated_by extends MolajoField
             $render['checkbox'] = false;
             $render['data_type'] = 'string';
             $render['column_name'] = 'author_name';
-            $render['print_value'] = $this->escape($item->author_name);
+            $render['print_value'] = $item->author_name;
 
             return $render;
         }

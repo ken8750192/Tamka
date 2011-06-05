@@ -49,7 +49,8 @@ class MolajoSubmenuHelper
             if (!$subMenuValue == '0') {
                 $functionName = 'add'.ucfirst($subMenuValue).'Submenu';
                 if (method_exists('MolajoSubmenuHelper',$functionName)) {
-                    MolajoSubmenuHelper::$functionName (JRequest::getCmd('option'), JRequest::getCmd('default_view'));
+                    $submenu = new MolajoSubmenuHelper ();
+                    $submenu->$functionName (JRequest::getCmd('option'), JRequest::getCmd('default_view'));
                 }
             }
         }        

@@ -498,13 +498,13 @@ $items[$i]->checked_out = false;
 
                 /** trigger events */
 //                $this->_triggerEvents();
-
+                $dateHelper = new MolajoDateHelper ();
                 if (isset($items[$i]->created)) {
                     $items[$i]->created_date = date($items[$i]->created);
-                    $items[$i]->created_ccyymmdd = MolajoDateHelper::convertCCYYMMDD ($items[$i]->created);
-                    $items[$i]->created_n_days_ago = MolajoDateHelper::differenceDays (date('Y-m-d'), $items[$i]->created_ccyymmdd);
+                    $items[$i]->created_ccyymmdd = $dateHelper->convertCCYYMMDD ($items[$i]->created);
+                    $items[$i]->created_n_days_ago = $dateHelper->differenceDays (date('Y-m-d'), $items[$i]->created_ccyymmdd);
                     $items[$i]->created_ccyymmdd = str_replace('-', '', $items[$i]->created_ccyymmdd);
-                    $items[$i]->created_pretty_date = MolajoDateHelper::prettydate ($items[$i]->created);
+                    $items[$i]->created_pretty_date = $dateHelper->prettydate ($items[$i]->created);
                 }  else {
                     $items[$i]->created_n_days_ago = '';
                     $items[$i]->created_ccyymmdd = '';
@@ -512,10 +512,10 @@ $items[$i]->checked_out = false;
                 }
 
                 if (isset($items[$i]->modified)) {
-                    $items[$i]->modified_ccyymmdd = MolajoDateHelper::convertCCYYMMDD ($items[$i]->modified);
-                    $items[$i]->modified_n_days_ago = MolajoDateHelper::differenceDays (date('Y-m-d'), $items[$i]->modified_ccyymmdd);
+                    $items[$i]->modified_ccyymmdd = $dateHelper->convertCCYYMMDD ($items[$i]->modified);
+                    $items[$i]->modified_n_days_ago = $dateHelper->differenceDays (date('Y-m-d'), $items[$i]->modified_ccyymmdd);
                     $items[$i]->modified_ccyymmdd = str_replace('-', '', $items[$i]->modified_ccyymmdd);
-                    $items[$i]->modified_pretty_date = MolajoDateHelper::prettydate ($items[$i]->modified);
+                    $items[$i]->modified_pretty_date = $dateHelper->prettydate ($items[$i]->modified);
                 }  else {
                     $items[$i]->modified_n_days_ago = '';
                     $items[$i]->modified_ccyymmdd = '';
@@ -523,10 +523,10 @@ $items[$i]->checked_out = false;
                 }
 
                 if (isset($items[$i]->publish_up)) {
-                    $items[$i]->published_ccyymmdd = MolajoDateHelper::convertCCYYMMDD ($items[$i]->publish_up);
-                    $items[$i]->published_n_days_ago = MolajoDateHelper::differenceDays (date('Y-m-d'), $items[$i]->published_ccyymmdd);
+                    $items[$i]->published_ccyymmdd = $dateHelper->convertCCYYMMDD ($items[$i]->publish_up);
+                    $items[$i]->published_n_days_ago = $dateHelper->differenceDays (date('Y-m-d'), $items[$i]->published_ccyymmdd);
                     $items[$i]->published_ccyymmdd = str_replace('-', '', $items[$i]->published_ccyymmdd);
-                    $items[$i]->published_pretty_date = MolajoDateHelper::prettydate ($items[$i]->publish_up);
+                    $items[$i]->published_pretty_date = $dateHelper->prettydate ($items[$i]->publish_up);
                 }  else {
                     $items[$i]->published_n_days_ago = '';
                     $items[$i]->published_ccyymmdd = '';

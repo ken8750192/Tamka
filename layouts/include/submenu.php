@@ -11,4 +11,5 @@ defined('MOLAJO') or die;
 /**
  * Administrator Submenu
  */
-MolajoSubmenuHelper::add();
+$submenu = new MolajoSubmenuHelper ();
+$submenu->add();

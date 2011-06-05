@@ -110,7 +110,7 @@ class MolajoFieldContent_type extends MolajoField
             if ($item->created == 0) {
                 $render['print_value'] = '';
             } else {
-                $render['print_value'] = $this->escape($item->content_type_name);
+                $render['print_value'] = $item->content_type_name;
             }
 
             return $render;

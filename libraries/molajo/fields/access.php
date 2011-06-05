@@ -115,7 +115,7 @@ class MolajoFieldAccess extends MolajoField
             $render['checkbox'] = false;
             $render['data_type'] = 'string';
             $render['column_name'] = 'access';
-            $render['print_value'] = $this->escape($item->access_level);
+            $render['print_value'] = $item->access_level;
 
             return $render;
         }
