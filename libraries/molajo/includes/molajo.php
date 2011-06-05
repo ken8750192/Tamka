@@ -49,11 +49,22 @@ foreach ($files as $file) {
         $filehelper->requireClassFile(MOLAJO_LIBRARY.'/fields/'.$file, 'MolajoField'.ucfirst(substr($file, 0, strpos($file, '.'))));
     }
 }
+/** form */
+$files = JFolder::files(MOLAJO_LIBRARY.'/form/fields', '\.php$', false, false);
+foreach ($files as $file) {
+    $filehelper->requireClassFile(MOLAJO_LIBRARY.'/form/fields/', 'JFormField'.ucfirst(substr($file, 0, strpos($file, '.'))));
+}
 
 /** Helpers */
 $files = JFolder::files(MOLAJO_LIBRARY.'/helpers', '\.php$', false, false);
 foreach ($files as $file) {
     $filehelper->requireClassFile(MOLAJO_LIBRARY.'/helpers/'.$file, 'Molajo'.ucfirst(substr($file, 0, strpos($file, '.'))).'Helper');
+}
+
+/** html fields */
+$files = JFolder::files(MOLAJO_LIBRARY.'/html/html', '\.php$', false, false);
+foreach ($files as $file) {
+    $filehelper->requireClassFile(MOLAJO_LIBRARY.'/html/html/', 'JHtml'.ucfirst(substr($file, 0, strpos($file, '.'))));
 }
 
 /** Models */
