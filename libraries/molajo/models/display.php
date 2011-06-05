@@ -544,7 +544,8 @@ $items[$i]->checked_out = false;
                 }
 
                 /** acl-append item-specific task permissions **/
-                $results = $aclClass::getUserItemPermissions ($this->getState('request.option'),
+                $acl = new $aclClass();
+                $results = $acl->getUserItemPermissions ($this->getState('request.option'),
                                                               $this->getState('request.single_view'),
                                                               $this->getState('request.task'),
                                                               $items[$i]->id,
@@ -673,7 +674,8 @@ $items[$i]->checked_out = false;
 */
         /** set view access criteria for site visitor **/
         $aclClass = ucfirst(strtolower($this->getState('request.default_view'))).'ACL';
-        $aclClass::getQueryParts ($this->getState('request.default_view'), $this->query, 'user', '', $this->getState('request.default_view'));
+        $acl = new $aclClass ();
+        $results = $acl->getQueryParts ($this->getState('request.default_view'), $this->query, 'user', '', $this->getState('request.default_view'));
 
         /** set ordering and direction **/
         $orderCol	= $this->state->get('list.ordering', 'a.title');

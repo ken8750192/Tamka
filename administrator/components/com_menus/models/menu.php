@@ -203,7 +203,7 @@ class MenusModelMenu extends JModelForm
 		$this->setState('menu.id', $table->id);
 
 		// Clean the cache
-		$this->cleanCache();
+		// $this->cleanCache();
 
 		return true;
 	}
@@ -235,7 +235,7 @@ class MenusModelMenu extends JModelForm
 		}
 
 		// Clean the cache
-		$this->cleanCache();
+		// $this->cleanCache();
 
 		return true;
 	}

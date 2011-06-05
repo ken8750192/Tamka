@@ -19,9 +19,10 @@ if ($this->state->get('component_task') == 'add') {
     $set = 'config_manager_button_bar_option';
 }
 $aclClass = ucfirst($this->state->get('request.default_view')).'ACL';
-$this->permissions = $aclClass::getUserPermissionSet ($this->state->get('request.option'),
-                                                      $this->state->get('request.single_view'),
-                                                      $set);
+$acl = new $aclClass ();
+$this->permissions = $acl->getUserPermissionSet ($this->state->get('request.option'),
+                                                 $this->state->get('request.single_view'),
+                                                 $set);
 
 $toolbar = new MolajoToolbarHelper ();
 $toolbar->addButtonsDefaultLayout ($this->state->get('filter.option'), $this->permissions);

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id: update.php 21320 2011-05-11 01:01:37Z dextercowley $
+ * @version		$Id: update.php 21439 2011-06-04 13:38:13Z dextercowley $
  * @package		Joomla.Administrator
  * @subpackage	com_installer
  * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
@@ -204,12 +204,12 @@ class InstallerModelUpdate extends JModelList
 		$update->set('type', $package['type']);
 
 		// Install the package
-		if (!$installer->install($package['dir'])) {
-			// There was an error installing the package
+		if (!$installer->update($package['dir'])) {
+			// There was an error updating the package
 			$msg = JText::sprintf('COM_INSTALLER_MSG_UPDATE_ERROR', JText::_('COM_INSTALLER_TYPE_TYPE_'.strtoupper($package['type'])));
 			$result = false;
 		} else {
-			// Package installed sucessfully
+			// Package updated successfully
 			$msg = JText::sprintf('COM_INSTALLER_MSG_UPDATE_SUCCESS', JText::_('COM_INSTALLER_TYPE_TYPE_'.strtoupper($package['type'])));
 			$result = true;
 		}

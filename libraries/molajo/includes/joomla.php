@@ -132,7 +132,8 @@ jimport('overrides.application.categories');
 jimport('overrides.application.router');
 
 /** database */
-jimport('joomla.database.table');
+jimport('joomla.database');
+JLoader::register('JTable', JPATH_PLATFORM.'/joomla/database/table.php');
 jimport('overrides.database.table.user');
 jimport('overrides.database.table.usergroup');
 jimport('overrides.database.table.viewlevel');

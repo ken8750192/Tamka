@@ -431,13 +431,16 @@ class MolajoModelConfiguration extends JModel
      */
     public function getOverrideKey ($option_id)
     {
-        $configurationArray = JRequest::getVar('configurationArray');
+        $configurationArray = JRequest::getVar('configurationArray', array());
 
-        foreach ($configurationArray as $count => $option) {
-            if ($option->option_id == $option_id) {
-                return $option->component_option;
+        foreach ($configurationArray
+                    as $confOption_id => $confComponent_option) {
+
+            if ($confOption_id == $option_id) {
+                return $confComponent_option;
             }
         }
+
         return false;
     }
 
@@ -504,13 +507,9 @@ class MolajoModelConfiguration extends JModel
             return false;
         }
 
-        $i=0;
         $optionArray = array();
         if (count($results) > 0) {
             foreach ($results as $count => $item) {
-
-                /** store the option id **/
-                $optionArray[$i]->option_id = $item->option_id;
 
                 /** retrieve override component_option, if existing **/
                 $query = $db->getQuery(true);
@@ -523,12 +522,10 @@ class MolajoModelConfiguration extends JModel
                 $db->setQuery($query->__toString());
 
                 if ($componentResults = $db->loadObjectList()) {
-                    $optionArray[$i]->component_option = $component_option;
+                    $optionArray[$item->option_id] = $component_option;
                 } else {
-                    $optionArray[$i]->component_option = 'com_molajo';
+                    $optionArray[$item->option_id] = 'com_molajo';
                 }
-
-                $i++;
             }
         }
 

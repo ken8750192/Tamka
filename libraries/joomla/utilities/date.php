@@ -411,11 +411,11 @@ class JDate extends DateTime
 	 *
 	 * @since   11.1
 	 */
-	public function setTimezone(DateTimeZone $tz)
-	{
-		$this->_tz = $tz;
-		return parent::setTimezone($tz);
-	}
+//	public function setTimezone(DateTimeZone $tz)
+//	{
+//		$this->_tz = $tz;
+//		return parent::setTimezone($tz);
+//	}
 
 	/**
 	 * Gets the date in a specific format

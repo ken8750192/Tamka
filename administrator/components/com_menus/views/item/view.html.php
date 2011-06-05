@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id: view.html.php 21320 2011-05-11 01:01:37Z dextercowley $
+ * @version		$Id: view.html.php 21395 2011-05-26 18:14:52Z dextercowley $
  * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
@@ -92,7 +92,17 @@ class MenusViewItem extends JView
 		JToolBarHelper::divider();
 
 		// Get the help information for the menu item.
+		$lang = JFactory::getLanguage();
+
 		$help = $this->get('Help');
-		JToolBarHelper::help($help->key, $help->local, $help->url);
+		if ($lang->hasKey($help->url)) {
+			$debug = $lang->setDebug(false);
+			$url = JText::_($help->url);
+			$lang->setDebug($debug);
+		}
+		else {
+			$url = $help->url;
+		}
+		JToolBarHelper::help($help->key, $help->local, $url);
 	}
 }

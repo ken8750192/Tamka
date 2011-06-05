@@ -347,7 +347,9 @@ abstract class JDatabase
 	 *
 	 * @since   11.1
 	 */
-	abstract public static function test();
+// Amy Stephen - PHP Strict Fix
+//abstract public static function test();
+	public static function test() {}
 
 	/**
 	 * Magic method to provide method alias support for quote() and quoteName().

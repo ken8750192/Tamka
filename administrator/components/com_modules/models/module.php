@@ -115,7 +115,7 @@ class ModulesModelModule extends JModelAdmin
 		}
 
 		// Clear modules cache
-		$this->cleanCache();
+		// $this->cleanCache();
 
 		return true;
 	}
@@ -197,7 +197,7 @@ class ModulesModelModule extends JModelAdmin
 		}
 
 		// Clear modules cache
-		$this->cleanCache();
+		// $this->cleanCache();
 
 		return true;
 	}
@@ -515,7 +515,7 @@ class ModulesModelModule extends JModelAdmin
 	 */
 	function validate($form, $data)
 	{
-//require_once(JPATH_ADMINISTRATOR.'/components/com_articles/helpers/articles.php');
+		require_once(JPATH_ADMINISTRATOR.'/components/com_content/helpers/content.php');
 
 		return parent::validate($form, $data);
 	}
@@ -684,7 +684,7 @@ class ModulesModelModule extends JModelAdmin
 		$this->setState('module.id',			$table->id);
 
 		// Clear modules cache
-		$this->cleanCache();
+		// $this->cleanCache();
 
 		// Clean module cache
 		parent::cleanCache($table->module, $table->client_id);

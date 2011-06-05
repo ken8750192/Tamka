@@ -98,7 +98,7 @@ class TemplatesModelStyle extends JModelAdmin
 		}
 
 		// Clean cache
-		$this->cleanCache();
+		// $this->cleanCache();
 
 		return true;
 	}
@@ -152,7 +152,7 @@ class TemplatesModelStyle extends JModelAdmin
 		}
 
 		// Clean cache
-		$this->cleanCache();
+		// $this->cleanCache();
 
 		return true;
 	}
@@ -446,7 +446,7 @@ class TemplatesModelStyle extends JModelAdmin
 		}
 
 		// Clean the cache.
-		$this->cleanCache();
+		// $this->cleanCache();
 
 		// Trigger the onExtensionAfterSave event.
 		$dispatcher->trigger('onExtensionAfterSave', array('com_templates.style', &$table, $isNew));
@@ -514,7 +514,7 @@ class TemplatesModelStyle extends JModelAdmin
 		}
 
 		// Clean the cache.
-		$this->cleanCache();
+		// $this->cleanCache();
 
 		return true;
 	}
@@ -568,7 +568,7 @@ class TemplatesModelStyle extends JModelAdmin
 		}
 
 		// Clean the cache.
-		$this->cleanCache();
+		// $this->cleanCache();
 
 		return true;
 	}

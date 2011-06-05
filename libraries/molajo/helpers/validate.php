@@ -29,9 +29,9 @@ class MolajoValidateHelper
     public function checkRequest ()
     {
         if (JFactory::getApplication()->getName() == 'site') {
-            return MolajoValidateHelper::checkAdministratorRequest();
+            return $this->checkAdministratorRequest();
         } else {
-            return MolajoValidateHelper::checkAdministratorRequest();
+            return $this->checkAdministratorRequest();
         }
     }
 

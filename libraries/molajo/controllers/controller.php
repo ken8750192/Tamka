@@ -236,7 +236,8 @@ class MolajoController extends JController
         }
 
         $aclClass = ucfirst(JRequest::getCmd('default_view')).'ACL';
-        $results = $aclClass::authoriseTask (JRequest::getCmd('option'), JRequest::getCmd('single_view'), $checkTask, $checkId, $checkCatid, $checkTable);
+        $acl = new $aclClass ();
+        $results = $acl->authoriseTask (JRequest::getCmd('option'), JRequest::getCmd('single_view'), $checkTask, $checkId, $checkCatid, $checkTable);
         if ($results === false) {
             $this->redirectClass = new MolajoControllerRedirect ();
             $this->redirectClass->setRedirectMessage(JText::_('MOLAJO_ACL_ERROR_ACTION_NOT_PERMITTED').' '.$checkTask);

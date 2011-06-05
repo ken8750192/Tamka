@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id: sysinfo.php 20965 2011-03-15 12:01:48Z infograf768 $
+ * @version		$Id: sysinfo.php 21438 2011-06-04 13:35:56Z dextercowley $
  * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
@@ -104,6 +104,7 @@ class AdminModelSysInfo extends JModel
 		{
 			$this->info = array();
 			$version = new JVersion();
+			$platform = new JPlatform();
 			$db = JFactory::getDBO();
 			if (isset($_SERVER['SERVER_SOFTWARE'])) {
 				$sf = $_SERVER['SERVER_SOFTWARE'];
@@ -118,6 +119,7 @@ class AdminModelSysInfo extends JModel
 			$this->info['server']		= $sf;
 			$this->info['sapi_name']	= php_sapi_name();
 			$this->info['version']		= $version->getLongVersion();
+			$this->info['platform']		= $platform->getLongVersion();
 			$this->info['useragent']	= phpversion() <= '4.2.1' ? getenv("HTTP_USER_AGENT") : $_SERVER['HTTP_USER_AGENT'];
 		}
 		return $this->info;
@@ -197,7 +199,7 @@ class AdminModelSysInfo extends JModel
 				$this->_addDirectory('language'.DS.$slang, JPATH_SITE.'/language/'.$slang);
 			}
 
-			$this->_addDirectory('libraries', JPATH_PLATFORM);
+			$this->_addDirectory('libraries', JPATH_LIBRARIES);
 
 			$this->_addDirectory('media', JPATH_SITE.'/media');
 			$this->_addDirectory('modules', JPATH_SITE.'/modules');

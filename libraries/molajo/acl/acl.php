@@ -10,37 +10,56 @@ defined('MOLAJO') or die;
 
 class ACL
 {
+
     /**
     *  Type 1 --> authoriseTask
     *
     *  Called from Controllers to verify user authorisation for a specific Task
     *
     *  authoriseTask determines the implemented ACL class and runs appropriate checkTASKAuthorisation method(s)
-    *
-    *  @param      string      $option - component ex. com_articles
-    *  @param      string      $entity - singular form of component subject ex. article, comment
-    *  @param      string      $task - all tasks handled in the code must be defined by member ex. display, add, delete
-    *  @param      int         $id - primary key of the item or the value 0
-    *  @param      array       $item - table row related to the id or an empty array
-    *
-    *  @return     boolean
-    *  @since      1.6
     */
-    public function authoriseTask ($option, $entity, $task, $catid = 0, $id = 0, $item = array())
-    {
-        $authoriseTaskMethod = 'check'.ucfirst(strtolower($task)).'Authorisation';
-        $class = ACL::getMethodClass ($authoriseTaskMethod, $option);
-        if ($class == false) {
-            return false;
-        }
 
-        $aclClass = new $class();
-        if (method_exists($aclClass,$authoriseTaskMethod)) {
-            return $aclClass->$authoriseTaskMethod ($option, $entity, $task, $catid, $id, $item);
-        } else {
-            JError::raiseError(403, JText::_('MOLAJO_ACL_CLASS_METHOD_NOT_FOUND'). ' '.$aclClass.'::'.$authoriseTaskMethod);
-            return false;
+    /**
+     * getUserPermissionSet --> authoriseTask
+     *
+     * Evaluates User Permissions for a set of tasks and passes back an array with results
+     *
+     * Note: No additional ACL Implementation method needed as this uses the existing Task/ACL Permission processes
+     *
+     * @param string $option 'com_articles', etc.
+     * @param string $entity 'article', or 'comment', etc.
+     * @param string $set maps to a configuration set of tasks
+     *
+     * @return array
+     */
+    public function getUserPermissionSet ($option, $entity, $set)
+    {
+        /** component parameters **/
+        $params = JComponentHelper::getParams($option);
+
+        /** loop thru config options and add ToolBar buttons **/
+        $count = 0;
+        $processedOptionArray = array();
+        $userPermissions = array();
+
+        for ($i=1; $i < 99; $i++) {
+
+            $optionValue = $params->def($set.$i, null);
+
+            if ($optionValue == null) {
+               break;
+            }
+            if ($optionValue == '0') {
+
+            } else if (in_array($optionValue, $processedOptionArray)) {
+
+            } else {
+                $processedOptionArray[] = $optionValue;
+                $aclResults = $this->authoriseTask ($option, $entity, $optionValue, 0, 0, array());
+                $userPermissions[$optionValue] = $aclResults;
+            }
         }
+        return $userPermissions;
     }
 
     /**
@@ -66,7 +85,7 @@ class ACL
 
         foreach ( $tasks as $single )   {
             $taskName = strtolower($single->value);
-            $aclResults = ACL::authoriseTask ($option, $entity, $taskName, $catid, $id, $item);
+            $aclResults = $this->authoriseTask ($option, $entity, $taskName, $catid, $id, $item);
             $itemFieldname = 'can'.ucfirst(strtolower($taskName));
             $item->$itemFieldname = $aclResults;
         }
@@ -75,46 +94,36 @@ class ACL
     }
 
     /**
-     * getUserPermissionSet
-     *
-     * Evaluates User Permissions for a set of tasks and passes back an array with results
-     *
-     * Note: No additional ACL Implementation method needed as this uses the existing Task/ACL Permission processes
-     *
-     * @param string $option 'com_articles', etc.
-     * @param string $entity 'article', or 'comment', etc.
-     * @param string $set maps to a configuration set of tasks
-     *
-     * @return array
-     */
-    public function getUserPermissionSet ($option, $entity, $set)
+    *  Type 1 --> authoriseTask
+    *
+    *  Called from Controllers to verify user authorisation for a specific Task
+    *
+    *  authoriseTask determines the implemented ACL class and runs appropriate checkTASKAuthorisation method(s)
+    *
+    *  @param      string      $option - component ex. com_articles
+    *  @param      string      $entity - singular form of component subject ex. article, comment
+    *  @param      string      $task - all tasks handled in the code must be defined by member ex. display, add, delete
+    *  @param      int         $id - primary key of the item or the value 0
+    *  @param      array       $item - table row related to the id or an empty array
+    *
+    *  @return     boolean
+    *  @since      1.6
+    */
+    public function authoriseTask ($option, $entity, $task, $catid = 0, $id = 0, $item = array())
     {
-        /** component parameters **/
-        $params = JComponentHelper::getParams($option);
-        
-        /** loop thru config options and add ToolBar buttons **/
-        $count = 0;
-        $processedOptionArray = array();
-        $userPermissions = array();
-
-        for ($i=1; $i < 99; $i++) {
-
-            $optionValue = $params->def($set.$i, null);
-
-            if ($optionValue == null) {
-               break;
-            }
-            if ($optionValue == '0') {
-
-            } else if (in_array($optionValue, $processedOptionArray)) {
-
-            } else {
-                $processedOptionArray[] = $optionValue;
-                $aclResults = ACL::authoriseTask ($option, $entity, $optionValue, 0, 0, array());
-                $userPermissions[$optionValue] = $aclResults;
-            }
+        $authoriseTaskMethod = 'check'.ucfirst(strtolower($task)).'Authorisation';
+        $class = $this->getMethodClass ($authoriseTaskMethod, $option);
+        if ($class == false) {
+            return false;
         }
-        return $userPermissions;
+
+        $aclClass = new $class();
+        if (method_exists($aclClass,$authoriseTaskMethod)) {
+            return $aclClass->$authoriseTaskMethod ($option, $entity, $task, $catid, $id, $item);
+        } else {
+            JError::raiseError(403, JText::_('MOLAJO_ACL_CLASS_METHOD_NOT_FOUND'). ' '.$aclClass.'::'.$authoriseTaskMethod);
+            return false;
+        }
     }
 
     /**
@@ -134,11 +143,12 @@ class ACL
     public function getQueryParts ($option, $query, $type, $filterValue=null)
     {
         $method = 'get'.ucfirst(strtolower($type)).'QueryParts';
-        $aclClass = ACL::getMethodClass ($method, $option);
+        $aclClass = $this->getMethodClass ($method, $option);
         if ($aclClass == false) {
             return false;
         }
-        $aclClass::$method ($query, $type, $filterValue);
+        $acl = new $aclClass;
+        $acl->$method ($query, $type, $filterValue);
     }
 
     /**
@@ -157,11 +167,12 @@ class ACL
     public function getList ($type, $option='', $task='', $params=array())
     {
         $method = 'get'.ucfirst(strtolower($type)).'List';
-        $aclClass = ACL::getMethodClass ($method, $option);
+        $aclClass = $this->getMethodClass ($method, $option);
         if ($aclClass == false) {
             return false;
         }
-        return $aclClass::$method ($option, $task, $params);
+        $acl = new $aclClass;
+        return $acl->$method ($option, $task, $params);
     }
 
     /**
@@ -169,28 +180,28 @@ class ACL
      */
     public function getAuthorisedViewLevels ()
     {
-        return ACL::getList ('Userviewgroups', $option='', $task='', $params=array());
+        return $this->getList ('Userviewgroups', $option='', $task='', $params=array());
     }
     /**
      * @deprecated 1.6	Use the getList method instead.
      */
     public function getAuthorisedGroups ()
     {
-        return ACL::getList ('Usergroups', $option='', $task='', $params=array());
+        return $this->getList ('Usergroups', $option='', $task='', $params=array());
     }
     /**
      * @deprecated 1.6	Use the getList method instead.
      */
     public function getAuthorisedCategories ($option, $task)
     {
-        return ACL::getList ('Usercategories', $option, $task, $params=array());
+        return $this->getList ('Usercategories', $option, $task, $params=array());
     }
     /**
      * @deprecated 1.6	Use the getList method instead.
      */
     public function getUserGroups ()
     {
-        return ACL::getList ('AllUserGroups');
+        return $this->getList ('AllUserGroups');
     }
 
     /**
@@ -211,7 +222,7 @@ class ACL
     public function getUserFormAuthorisations ($option, $entity, $task, $id, $form, $item)
     {
         $method = 'checkFormAuthorisations';
-        $class = ACL::getMethodClass ($method, $option);
+        $class = $this->getMethodClass ($method, $option);
         if ($class == false) {
             return false;
         }
