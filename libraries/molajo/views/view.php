@@ -301,7 +301,8 @@ class MolajoView extends JView
             // Set some initial content variables (Twig refers to this as context I think I read)
             $context = array(
                 'params' => $this->params,
-                'data'   => $this->rowset
+                'rowset' => $this->rowset,
+                'row'    => $this->row
             );
 
             /*
@@ -309,29 +310,32 @@ class MolajoView extends JView
              * It may well be that there is only one
              * $layout.twig.php which is perfectly valid
              */
-            $base = $layout.'_'; // There may be use for alternate layouts in one view
-            $blocks = "{% extends \"twig/layouts/$layout.twig.php\" %}";
-            foreach (JFolder::files($this->layoutFolder.'/layouts/') AS $file) {
-                if(strstr($file, $base)) {
-                    // Each template could be fed with custom vars
-                    $tmpl = JString::substr(JFile::stripExt($file), JString::strlen($base));
-                    if(isset($this->{$tmpl})) {
-                        $data['this'] = $this->{$tmpl};
-                    }
-                    $blocks .= JFile::read($this->layoutFolder.'/layouts/'.$file);
+            $structure = $this->twig->loadTemplate('twig/layouts/'.$layout.'.twig.php');
+            $overrides = '';
+
+            $blocks    = $structure->getBlocks();
+            foreach($blocks AS $block => $content) {
+                $override = $this->layoutFolder.'/layouts/'.$layout.'_'.$block.'.php';
+                if(file_exists($override)) {
+                    $overrides .= JFile::read($override);
                 }
             }
 
             // Assemble the blocks. We may want to cache this or put in session variable?
-            JFile::write($this->layoutFolder.'/layouts/blocks.php', $blocks);
+            if(!empty($overrides)) {
+                $overrides = "{% extends \"twig/layouts/$layout.twig.php\" %}".$overrides;
+                JFile::write($this->layoutFolder.'/layouts/'.$layout.'_overrides.php', $overrides);
 
-            if(file_exists($this->layoutFolder.'/layouts/base_list.php')) {
-                $this->twig->loadTemplate('/twig/layouts/blocks.php')->display($context);
+                if(file_exists($this->layoutFolder.'/layouts/base_list.php')) {
+                    $this->twig->loadTemplate('/twig/layouts/'.$layout.'_overrides.php')->display($context);
+                }
+                else {
+                    // trigger some exception
+                }
             }
             else {
-                // trigger some exception
+                $structure->display($context);
             }
-
         }
 
         /**
@@ -344,62 +348,47 @@ class MolajoView extends JView
          * C. After the last row in the rowset => layoutFolder/footer.php
          *
          */
-//            foreach ($this->rowset as $this->row) {
-//
-////                if(file_exists($this->layoutFolder.'/layouts/base.php')) {
-////
-////                    /*
-////                     * Make Twig cache configurable, this is important during development process
-////                     */
-////                    $this->twig->setCache(false);
-////
-////                    $template = $this->twig->loadTemplate('/twig/layouts/base.php');
-////        //            var_dump(get_class_methods($this->twig));
-////                    $template->display(array(
-////                        'title' => $this->row->title,
-////                        'content' => $this->row->text,
-////                        'footer' => $this->row->author_name
-////                    ));
-////                }
-//
-//
-//                /** layout: top */
-//                if ($rowCount == 1) {
-//                    if (file_exists($this->layoutFolder.'/layouts/top.php')) {
-//                        include $this->layoutFolder.'/layouts/top.php';
-//                    }
-//                }
-//
-//                /** item: header */
-//                if (file_exists($this->layoutFolder.'/layouts/header.php')) {
-//                    include $this->layoutFolder.'/layouts/header.php';
-//                }
-//
-//                /** event: After Display of Title */
-//                if (isset($this->row->event->afterDisplayTitle)) {
-//                    echo $this->row->event->afterDisplayTitle;
-//                }
-//                /** event: Before Content Display */
-//                if (isset($this->row->event->beforeDisplayContent)) {
-//                    echo $this->row->event->beforeDisplayContent;
-//                }
-//
-//                /** item: body */
-//                if (file_exists($this->layoutFolder.'/layouts/body.php')) {
-//                    include $this->layoutFolder.'/layouts/body.php';
-//                }
-//
-//                /** item: footer */
-//                if (file_exists($this->layoutFolder.'/layouts/footer.php')) {
-//                    include $this->layoutFolder.'/layouts/footer.php';
-//                }
-//
-//                $rowCount++;
-//            }
+        else {
+            foreach ($this->rowset as $this->row) {
 
-        /** layout: bottom */
-        if (file_exists($this->layoutFolder.'/layouts/bottom.php')) {
-            include $this->layoutFolder.'/layouts/bottom.php';
+                /** layout: top */
+                if ($rowCount == 1) {
+                    if (file_exists($this->layoutFolder.'/layouts/top.php')) {
+                        include $this->layoutFolder.'/layouts/top.php';
+                    }
+                }
+
+                /** item: header */
+                if (file_exists($this->layoutFolder.'/layouts/header.php')) {
+                    include $this->layoutFolder.'/layouts/header.php';
+                }
+
+                /** event: After Display of Title */
+                if (isset($this->row->event->afterDisplayTitle)) {
+                    echo $this->row->event->afterDisplayTitle;
+                }
+                /** event: Before Content Display */
+                if (isset($this->row->event->beforeDisplayContent)) {
+                    echo $this->row->event->beforeDisplayContent;
+                }
+
+                /** item: body */
+                if (file_exists($this->layoutFolder.'/layouts/body.php')) {
+                    include $this->layoutFolder.'/layouts/body.php';
+                }
+
+                /** item: footer */
+                if (file_exists($this->layoutFolder.'/layouts/footer.php')) {
+                    include $this->layoutFolder.'/layouts/footer.php';
+                }
+
+                $rowCount++;
+            }
+
+            /** layout: bottom */
+            if (file_exists($this->layoutFolder.'/layouts/bottom.php')) {
+                include $this->layoutFolder.'/layouts/bottom.php';
+            }
         }
 
         /** event: After Layout is finished */
@@ -415,6 +404,9 @@ class MolajoView extends JView
     }
 }
 
+/*
+ * Needs to be moved out, just for POC now
+ */
 class TwigHelper
 {
     public function text($string='')
