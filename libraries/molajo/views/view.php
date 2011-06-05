@@ -9,7 +9,7 @@
 defined('MOLAJO') or die;
 
 /**
- * Molajo View 
+ * Molajo View
  *
  * @package	Molajo
  * @subpackage	View
@@ -92,12 +92,12 @@ class MolajoView extends JView
         /** @var $user */
         $this->user = JFactory::getUser();
 
-        Twig_Autoloader::register();
+//        Twig_Autoloader::register();
 
         $loader = new Twig_Loader_Filesystem(MOLAJO_LAYOUTS);
         $this->twig = new Twig_Environment($loader, array(
           'cache' => MOLAJO_LAYOUTS.'/cache',
-        ));        
+        ));
     }
 
     /**
@@ -133,12 +133,12 @@ class MolajoView extends JView
                     $this->getColumnsFormatting ($type, $column, $value);
                 }
             }
-            
+
         } else if ($type == 'system') {
                 $registry->loadJSON($this->$type);
                 $options = $registry->toArray();
                 $this->getColumnsJSONArray ($type, $options);
-            
+
         } else {
             return false;
         }
@@ -148,16 +148,16 @@ class MolajoView extends JView
          */
         $this->layoutFolder = $this->findPath($layout);
         echo $this->renderMolajoLayout ('system');
-        
+
         return;
 
     }
 
     /**
      * getColumnsJSONArray
-     * 
+     *
      * Process Array from converted JSON Object
-     * 
+     *
      * @param  $type
      * @param  $options
      * @return void
@@ -204,13 +204,13 @@ class MolajoView extends JView
 
     /**
      * findPath
-     * 
+     *
      * Looks for path of Request Layout as a layout folder, in this order:
      *
      *  1. CurrentTemplate/html/$layout-folder/
      *  2. components/com_component/views/$view/tmpl/$layout-folder/
      *  3. MOLAJO_LAYOUTS/$layout-folder/
-     * 
+     *
      *  4. If none of the above, use normal Joomla tmpl/layout.php
      *
      * @param  $tpl
