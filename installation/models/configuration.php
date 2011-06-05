@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id: configuration.php 20196 2011-01-09 02:40:25Z ian $
+ * @version		$Id: configuration.php 21376 2011-05-24 17:11:48Z dextercowley $
  * @package		Joomla.Installation
  * @copyright	Copyright (C) 2005 - 2011 Open Source Matters. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
@@ -21,7 +21,10 @@ require_once JPATH_INSTALLATION.'/helpers/database.php';
  */
 class JInstallationModelConfiguration extends JModel
 {
-	function setup($options)
+	/**
+	 * @return boolean
+	 */
+	public function setup($options)
 	{
 		// Get the options as a JObject for easier handling.
 		$options = JArrayHelper::toObject($options, 'JObject');
@@ -154,8 +157,7 @@ class JInstallationModelConfiguration extends JModel
 			$useFTP = false;
 		}
 
-		if ($useFTP == true)
-		{
+		if ($useFTP == true) {
 			// Connect the FTP client
 			jimport('joomla.client.ftp');
 			jimport('joomla.filesystem.path');
@@ -174,9 +176,7 @@ class JInstallationModelConfiguration extends JModel
 			}
 
 			$ftp->quit();
-		}
-		else
-		{
+		} else {
 			if ($canWrite) {
 				file_put_contents($path, $buffer);
 				$session = JFactory::getSession();
@@ -237,11 +237,8 @@ class JInstallationModelConfiguration extends JModel
 		}
 
 		// Map the super admin to the Super Admin Group
-/**
- *  Molajo Hack: Modify group_id to 4 for Administrator - Amy Stephen
- */
 		$query = 'REPLACE INTO #__user_usergroup_map' .
-				' SET user_id = 42, group_id = 4';
+				' SET user_id = 42, group_id = 8';
 		$db->setQuery($query);
 		if (!$db->query()) {
 			$this->setError($db->getErrorMsg());

@@ -19,6 +19,7 @@ defined('JPATH_PLATFORM') or die;
  */
 abstract class JPane extends JObject
 {
+
 	public $useCookies = false;
 
 	/**

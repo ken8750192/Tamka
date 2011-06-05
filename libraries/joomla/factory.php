@@ -195,7 +195,7 @@ abstract class JFactory
 			$options['storage'] = $storage;
 		}
 
-//amy		jimport('joomla.cache.cache');
+		jimport('joomla.cache.cache');
 
 		$cache = JCache::getInstance($handler, $options);
 

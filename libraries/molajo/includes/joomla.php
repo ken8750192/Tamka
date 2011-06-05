@@ -55,8 +55,9 @@ if (!defined('IS_MAC')) {
 if (!defined('IS_UNIX')) {
 	define('IS_UNIX', (($os !== 'MAC') && ($os !== 'WIN')) ? true : false);
 }
+
 if (!class_exists('JVersion')) {
-    require_once JPATH_PLATFORM.'/version.php';
+    require JPATH_ROOT.'/includes/version.php';
 }
 JLoader::import('joomla.error.error');
 JLoader::import('joomla.error.exception');

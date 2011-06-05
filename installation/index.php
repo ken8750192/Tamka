@@ -1,14 +1,14 @@
 <?php
 /**
- * @version		$Id: index.php 21323 2011-05-11 01:15:08Z dextercowley $
+ * @version		$Id: index.php 21438 2011-06-04 13:35:56Z dextercowley $
  * @package		Joomla.Installation
  * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 // PHP 5 check
-if (version_compare(PHP_VERSION, '5.3', '<')) {
-	die('Your host needs to use PHP 5.3 or higher to run Molajo.');
+if (version_compare(PHP_VERSION, '5.2.4', '<')) {
+	die('Your host needs to use PHP 5.2.4 or higher to run Joomla 1.6.');
 }
 
 /**
@@ -34,7 +34,7 @@ define('JPATH_ROOT',			implode(DS, $parts));
 define('JPATH_SITE',			JPATH_ROOT);
 define('JPATH_CONFIGURATION',	JPATH_ROOT);
 define('JPATH_ADMINISTRATOR',	JPATH_ROOT.DS.'administrator');
-define('JPATH_PLATFORM',		JPATH_ROOT.DS.'libraries');
+define('JPATH_LIBRARIES',		JPATH_ROOT.DS.'libraries');
 define('JPATH_PLUGINS',			JPATH_ROOT.DS.'plugins');
 define('JPATH_INSTALLATION',	JPATH_ROOT.DS.'installation');
 define('JPATH_THEMES',			JPATH_BASE);
@@ -50,19 +50,22 @@ error_reporting(E_ALL);
 /*
  * Check for existing configuration file.
  */
-if (file_exists(JPATH_CONFIGURATION.'/configuration.php')
-    && (filesize(JPATH_CONFIGURATION.'/configuration.php') > 10)
-    && !file_exists(JPATH_INSTALLATION.'/index.php')) {
+if (file_exists(JPATH_CONFIGURATION.'/configuration.php') && (filesize(JPATH_CONFIGURATION.'/configuration.php') > 10) && !file_exists(JPATH_INSTALLATION.'/index.php')) {
 	header('Location: ../index.php');
 	exit();
 }
 
-/*
- * Joomla system startup
- */
+//
+// Joomla system startup.
+//
+
+// Import the cms version library if necessary.
+if (!class_exists('JVersion')) {
+	require JPATH_ROOT.'/includes/version.php';
+}
 
 // Bootstrap the Joomla Framework.
-require_once JPATH_PLATFORM.'/import.php';
+require_once JPATH_LIBRARIES.'/import.php';
 
 // Joomla library imports.
 jimport('joomla.database.table');

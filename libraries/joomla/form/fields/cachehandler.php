@@ -9,7 +9,7 @@
 
 defined('JPATH_PLATFORM') or die;
 
-//amy jimport('joomla.cache.cache');
+jimport('joomla.cache.cache');
 jimport('joomla.html.html');
 jimport('joomla.form.formfield');
 jimport('joomla.form.helper');

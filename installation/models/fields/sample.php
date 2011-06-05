@@ -13,7 +13,7 @@ jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 jimport('joomla.language.helper');
 jimport('joomla.form.formfield');
-JLoader::register('JFormFieldList', JPATH_PLATFORM.'/joomla/form/fields/list.php');
+JLoader::register('JFormFieldList', JPATH_LIBRARIES.'/joomla/form/fields/list.php');
 
 /**
  * Sample data Form Field class.
@@ -51,8 +51,9 @@ class JFormFieldSample extends JFormFieldList
 
 		// Build the options list from the list of files.
 		if (is_array($files)) {
-			foreach($files as $file) {
-				$options[] = JHtml::_('select.option', $file, $lang->hasKey($key='INSTL_'.($file=JFile::stripExt($file)).'_SET')?JText::_($key):$file);
+			foreach ($files as $file)
+			{
+				$options[] = JHtml::_('select.option', $file, $lang->hasKey($key = 'INSTL_'.($file=JFile::stripExt($file)).'_SET')?JText::_($key):$file);
 			}
 		}
 
@@ -70,13 +71,11 @@ class JFormFieldSample extends JFormFieldList
 	 */
 	protected function getInput()
 	{
-		if (!$this->value)
-		{
+		if (!$this->value) {
 			$conf = JFactory::getConfig();
 			if ($conf->get('sampledata')) {
 				$this->value = $conf->get('sampledata');
-			}
-			else {
+			} else {
 				$this->value = 'sample_data.sql';
 			}
 		}
