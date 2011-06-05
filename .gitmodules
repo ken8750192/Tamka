@@ -4,3 +4,6 @@
 [submodule "templates/test-template"]
 	path = templates/test-template
 	url = git@github.com:betweenbrain/Test-Template.git
+[submodule "templates/blankslate"]
+	path = templates/blankslate
+	url = git@github.com:CristinaSolana/blankslate.git
