@@ -110,7 +110,7 @@ jimport('joomla.utilities.date');
 jimport('joomla.cache.cache');
 jimport('joomla.cache.controller');
 jimport('joomla.cache.storage');
-JLoader::register('JCache', JPATH_PLATFORM.'/joomla/cache/cache.php');
+JLoader::register('JCache', OVERRIDES_LIBRARY.'/cache/cache.php');
 JLoader::register('JCacheController', JPATH_PLATFORM.'/joomla/cache/controller.php');
 JLoader::register('JCacheStorage', JPATH_PLATFORM.'/joomla/cache/storage.php');
 
