@@ -97,6 +97,7 @@ class MolajoView extends JView
         $loader = new Twig_Loader_Filesystem(MOLAJO_LAYOUTS);
         $this->twig = new Twig_Environment($loader, array(
           'cache' => MOLAJO_LAYOUTS.'/cache',
+          'debug' => true
         ));
     }
 
@@ -282,41 +283,103 @@ class MolajoView extends JView
          * C. After the last row in the rowset => layoutFolder/footer.php
          *
          */
-        foreach ($this->rowset as $this->row) {
+        if(file_exists($this->layoutFolder.'/layouts/base.php')) {
 
-            /** layout: top */
-            if ($rowCount == 1) {
-                if (file_exists($this->layoutFolder.'/layouts/top.php')) {
-                    include $this->layoutFolder.'/layouts/top.php';
+            /*
+             * TESTING VARS
+             */
+            $this->content = array('one'=>1, 'two'=>2);
+
+            $data = array();
+
+            /*
+             * Make Twig cache configurable, this is important during development process
+             */
+            $this->twig->setCache(false);
+
+            $template = $this->twig->loadTemplate('/twig/layouts/base.php');
+            var_dump(get_class_methods($template));
+            var_dump($template->getBlocks());
+            echo $template->renderBlock('block_content', array('content'=>$this->rowset) );
+//            $template->displayBlock(array('content'));
+
+            $base = 'base_'; // There may be use for alternate layouts in one view
+            foreach (JFolder::files($this->layoutFolder.'/layouts/') AS $file) {
+                if(strstr($file, $base)) {
+                    // Each template could be fed with custom vars
+                    $tmpl = JString::substr(JFile::stripExt($file), JString::strlen($base));
+                    if(isset($this->{$tmpl})) {
+                        $data['this'] = $this->{$tmpl};
+                    }
+
+//                    // Handle rowsets, must be done prettier (would prefer this being done in twig not here
+//                    if($tmpl == 'list' && isset($this->rowset)) {
+//                        echo $tmpl;
+//                        foreach($this->rowset AS $row) {
+//                            $data['data'] = $row;
+//                            $this->twig->loadTemplate('/twig/layouts/'.$file)->display($data);
+//                        }
+//                    }
+//                    else {
+//                        $data['data'] = $this->rowset;
+//                        $this->twig->loadTemplate('/twig/layouts/'.$file)->display($data);
+//                    }
                 }
             }
-
-            /** item: header */
-            if (file_exists($this->layoutFolder.'/layouts/header.php')) {
-                include $this->layoutFolder.'/layouts/header.php';
-            }
-
-            /** event: After Display of Title */
-            if (isset($this->row->event->afterDisplayTitle)) {
-                echo $this->row->event->afterDisplayTitle;
-            }
-            /** event: Before Content Display */
-            if (isset($this->row->event->beforeDisplayContent)) {
-                echo $this->row->event->beforeDisplayContent;
-            }
-
-            /** item: body */
-            if (file_exists($this->layoutFolder.'/layouts/body.php')) {
-                include $this->layoutFolder.'/layouts/body.php';
-            }
-
-            /** item: footer */
-            if (file_exists($this->layoutFolder.'/layouts/footer.php')) {
-                include $this->layoutFolder.'/layouts/footer.php';
-            }
-
-            $rowCount++;
         }
+
+//            foreach ($this->rowset as $this->row) {
+//
+////                if(file_exists($this->layoutFolder.'/layouts/base.php')) {
+////
+////                    /*
+////                     * Make Twig cache configurable, this is important during development process
+////                     */
+////                    $this->twig->setCache(false);
+////
+////                    $template = $this->twig->loadTemplate('/twig/layouts/base.php');
+////        //            var_dump(get_class_methods($this->twig));
+////                    $template->display(array(
+////                        'title' => $this->row->title,
+////                        'content' => $this->row->text,
+////                        'footer' => $this->row->author_name
+////                    ));
+////                }
+//
+//
+//                /** layout: top */
+//                if ($rowCount == 1) {
+//                    if (file_exists($this->layoutFolder.'/layouts/top.php')) {
+//                        include $this->layoutFolder.'/layouts/top.php';
+//                    }
+//                }
+//
+//                /** item: header */
+//                if (file_exists($this->layoutFolder.'/layouts/header.php')) {
+//                    include $this->layoutFolder.'/layouts/header.php';
+//                }
+//
+//                /** event: After Display of Title */
+//                if (isset($this->row->event->afterDisplayTitle)) {
+//                    echo $this->row->event->afterDisplayTitle;
+//                }
+//                /** event: Before Content Display */
+//                if (isset($this->row->event->beforeDisplayContent)) {
+//                    echo $this->row->event->beforeDisplayContent;
+//                }
+//
+//                /** item: body */
+//                if (file_exists($this->layoutFolder.'/layouts/body.php')) {
+//                    include $this->layoutFolder.'/layouts/body.php';
+//                }
+//
+//                /** item: footer */
+//                if (file_exists($this->layoutFolder.'/layouts/footer.php')) {
+//                    include $this->layoutFolder.'/layouts/footer.php';
+//                }
+//
+//                $rowCount++;
+//            }
 
         /** layout: bottom */
         if (file_exists($this->layoutFolder.'/layouts/bottom.php')) {
