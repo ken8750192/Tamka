@@ -273,6 +273,67 @@ class MolajoView extends JView
             include MOLAJO_LAYOUTS.'/include/head.php';
         }
 
+        /*
+         * Load Twig templates
+         *
+         * Background info: to able the use of a Twig structural template,
+         * all block overrides have to be inside a single override file.
+         * I therefor assemble an override file from all available
+         * template files $layout_layoutext.php
+         *
+         * I was thinking we need a filename that can easily be defined as
+         * a Twig template, like something.twig.php
+         *
+         */
+        $layout = 'base'; // Make more dynamic, we can use the layout variable in menu items maybe
+        if(file_exists($this->layoutFolder."/layouts/$layout.twig.php")) {
+
+            // Make Twig cache configurable, this is important during development process
+            $this->twig->setCache(false);
+
+            // Add JText through a helper class, we can maybe add several Jor M methods that are needed
+            $this->twig->addGlobal('m', new TwigHelper());
+                /*
+                 * This works to:
+                 * $this->twig->addGlobal('jtext', new JText());
+                 */
+
+            // Set some initial content variables (Twig refers to this as context I think I read)
+            $context = array(
+                'params' => $this->params,
+                'data'   => $this->rowset
+            );
+
+            /*
+             * Iterate over the available layouts.
+             * It may well be that there is only one
+             * $layout.twig.php which is perfectly valid
+             */
+            $base = $layout.'_'; // There may be use for alternate layouts in one view
+            $blocks = "{% extends \"twig/layouts/$layout.twig.php\" %}";
+            foreach (JFolder::files($this->layoutFolder.'/layouts/') AS $file) {
+                if(strstr($file, $base)) {
+                    // Each template could be fed with custom vars
+                    $tmpl = JString::substr(JFile::stripExt($file), JString::strlen($base));
+                    if(isset($this->{$tmpl})) {
+                        $data['this'] = $this->{$tmpl};
+                    }
+                    $blocks .= JFile::read($this->layoutFolder.'/layouts/'.$file);
+                }
+            }
+
+            // Assemble the blocks. We may want to cache this or put in session variable?
+            JFile::write($this->layoutFolder.'/layouts/blocks.php', $blocks);
+
+            if(file_exists($this->layoutFolder.'/layouts/base_list.php')) {
+                $this->twig->loadTemplate('/twig/layouts/blocks.php')->display($context);
+            }
+            else {
+                // trigger some exception
+            }
+
+        }
+
         /**
          * List rowset
          *
@@ -283,51 +344,6 @@ class MolajoView extends JView
          * C. After the last row in the rowset => layoutFolder/footer.php
          *
          */
-        if(file_exists($this->layoutFolder.'/layouts/base.php')) {
-
-            /*
-             * TESTING VARS
-             */
-            $this->content = array('one'=>1, 'two'=>2);
-
-            $data = array();
-
-            /*
-             * Make Twig cache configurable, this is important during development process
-             */
-            $this->twig->setCache(false);
-
-            $template = $this->twig->loadTemplate('/twig/layouts/base.php');
-            var_dump(get_class_methods($template));
-            var_dump($template->getBlocks());
-            echo $template->renderBlock('block_content', array('content'=>$this->rowset) );
-//            $template->displayBlock(array('content'));
-
-            $base = 'base_'; // There may be use for alternate layouts in one view
-            foreach (JFolder::files($this->layoutFolder.'/layouts/') AS $file) {
-                if(strstr($file, $base)) {
-                    // Each template could be fed with custom vars
-                    $tmpl = JString::substr(JFile::stripExt($file), JString::strlen($base));
-                    if(isset($this->{$tmpl})) {
-                        $data['this'] = $this->{$tmpl};
-                    }
-
-//                    // Handle rowsets, must be done prettier (would prefer this being done in twig not here
-//                    if($tmpl == 'list' && isset($this->rowset)) {
-//                        echo $tmpl;
-//                        foreach($this->rowset AS $row) {
-//                            $data['data'] = $row;
-//                            $this->twig->loadTemplate('/twig/layouts/'.$file)->display($data);
-//                        }
-//                    }
-//                    else {
-//                        $data['data'] = $this->rowset;
-//                        $this->twig->loadTemplate('/twig/layouts/'.$file)->display($data);
-//                    }
-                }
-            }
-        }
-
 //            foreach ($this->rowset as $this->row) {
 //
 ////                if(file_exists($this->layoutFolder.'/layouts/base.php')) {
@@ -396,5 +412,13 @@ class MolajoView extends JView
         ob_end_clean();
 
         return $output;
+    }
+}
+
+class TwigHelper
+{
+    public function text($string='')
+    {
+        return JText::_($string);
     }
 }
