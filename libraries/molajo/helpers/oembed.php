@@ -41,8 +41,7 @@ class MolajoHelperOembed {
 		foreach ($jsonResults as $result) {
 
 			preg_match( '#'.$result->{'url_scheme'}.'#', $option_URL, $matches );
-var_dump($matches);
-die();
+
 			if (count( $matches ) == 0) {
 			}	else {
 				$providerName = $result->{'name'};

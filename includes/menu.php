@@ -9,13 +9,13 @@
 defined('JPATH_PLATFORM') or die;
 
 /**
- * JMenu class
+ * MolajoMenu class
  *
  * @package		Joomla.Site
  * @subpackage	Application
  * @since		1.5
  */
-class JMenuSite extends JMenu
+class MolajoMenuSite extends JMenu
 {
 	/**
 	 * Loads the entire menu table into memory.

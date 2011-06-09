@@ -515,7 +515,7 @@ class ModulesModelModule extends JModelAdmin
 	 */
 	function validate($form, $data)
 	{
-		require_once(JPATH_ADMINISTRATOR.'/components/com_content/helpers/content.php');
+//require_once(JPATH_ADMINISTRATOR.'/components/com_content/helpers/content.php');
 
 		return parent::validate($form, $data);
 	}
@@ -714,7 +714,7 @@ class ModulesModelModule extends JModelAdmin
 	 *
 	 * @since	1.6
 	 */
-	function cleanCache() {
-		parent::cleanCache('com_modules', $this->getClient());
-	}
+//	function cleanCache() {
+		//parent::cleanCache('com_modules', $this->getClient());
+//	}
 }

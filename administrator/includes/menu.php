@@ -9,13 +9,13 @@
 defined('JPATH_PLATFORM') or die;
 
 /**
- * JMenu class.
+ * MolajoMenuAdministrator class.
  *
  * @package		Joomla.Administrator
  * @subpackage	Application
  * @since		1.5
  */
-class JMenuAdministrator extends JMenu
+class MolajoMenuAdministrator extends JMenu
 {
 
 }

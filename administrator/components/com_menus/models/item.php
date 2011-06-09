@@ -1017,7 +1017,7 @@ class MenusModelItem extends JModelAdmin
 			$option = $juri->getVar('option');
 
 			// Clean the cache
-			parent::cleanCache($option);
+//			parent::cleanCache($option);
 		}
 
 		return true;
@@ -1190,8 +1190,8 @@ class MenusModelItem extends JModelAdmin
 	 * @since	1.6
 	 */
 	function cleanCache() {
-		parent::cleanCache('com_modules');
-		parent::cleanCache('mod_menu');
+		//parent::cleanCache('com_modules');
+		//parent::cleanCache('mod_menu');
 	}
 
 }

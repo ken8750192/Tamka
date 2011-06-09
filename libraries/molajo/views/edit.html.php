@@ -6,7 +6,7 @@
  * @copyright   Copyright (C) 2011 Amy Stephen. All rights reserved.
  * @license     GNU General Public License Version 2, or later http://www.gnu.org/licenses/gpl.html
  */
-defined('MOLAJO') or die;
+defined('MOLAJO') or die();
 
 /**
  *  MolajoViewEdit
@@ -17,7 +17,7 @@ defined('MOLAJO') or die;
  * @subpackage	Single View
  * @since	1.0
  */
-class MolajoViewEdit extends JView
+class MolajoViewEdit extends MolajoView
 {
     /** data */
     protected $state;
@@ -52,8 +52,7 @@ class MolajoViewEdit extends JView
         $this->form   = $this->get('Form');
         $this->item   = $this->get('Item');
         $this->state  = $this->get('State');
-var_dump($this->item );
-        die();
+
         if (count($errors = $this->get('Errors'))) {
             JError::raiseError(500, implode("\n", $errors));
             return false;

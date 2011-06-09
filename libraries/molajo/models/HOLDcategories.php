@@ -6,7 +6,7 @@
  */
 
 // Check to ensure this file is included in Joomla!
-defined('JPATH_PLATFORM') or die;
+defined('JPATH_PLATFORM') or die();
 
 jimport('joomla.application.component.model');
 

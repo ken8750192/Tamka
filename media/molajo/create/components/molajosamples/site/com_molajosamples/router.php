@@ -18,7 +18,9 @@ defined('MOLAJO') or die;
  */
 function MolajosamplesBuildRoute(&$query)
 {
-    return MolajoBuildRoute(&$query, 'com_molajosamples', 'molajosample', 'molajosamples', 'Molajosample', '#__molajosamples');
+    $router = new MolajoRouter ();
+    $router->
+    return buildRoute(&$query, 'com_molajosamples', 'molajosample', 'molajosamples', 'Molajosample', '#__molajosamples');
 }
 
 /**

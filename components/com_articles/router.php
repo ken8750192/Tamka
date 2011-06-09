@@ -18,7 +18,8 @@ defined('MOLAJO') or die;
  */
 function ArticlesBuildRoute(&$query)
 {
-    return MolajoBuildRoute(&$query, 'com_articles', 'article', 'articles', 'Article', '#__articles');
+    $router = new MolajoRouterBuild();
+    return $router->buildRoute(&$query, 'com_articles', 'article', 'articles', 'Article', '#__articles');
 }
 
 /**
@@ -33,5 +34,6 @@ function ArticlesBuildRoute(&$query)
  */
 function ArticlesParseRoute ($segments)
 {
-    return MolajoParseRoute($segments, 'com_articles', 'article', 'articles', 'Article', '#__articles');
+    $router = new MolajoRouterParse();
+    return $router->parseRoute($segments, 'com_articles', 'article', 'articles', 'Article', '#__articles');
 }

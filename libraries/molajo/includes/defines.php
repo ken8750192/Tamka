@@ -6,13 +6,12 @@
  * @copyright   Copyright (C) 2011 Amy Stephen. All rights reserved.
  * @license     GNU General Public License Version 2, or later http://www.gnu.org/licenses/gpl.html
  */
-defined('MOLAJO') or die;
+defined('MOLAJO') or die();
 define('MOLAJO_VERSION', '1.0');
 
 define('_JEXEC', 1);
 
 define('JPATH_SITE',			JPATH_ROOT);
-define('JPATH_CONFIGURATION',	JPATH_ROOT);
 define('JPATH_ADMINISTRATOR',	JPATH_ROOT.'/administrator');
 define('JPATH_PLATFORM',		JPATH_ROOT.'/libraries');
 define('JPATH_PLUGINS',			JPATH_ROOT.'/plugins');
@@ -21,11 +20,14 @@ define('JPATH_THEMES',			JPATH_BASE.'/templates');
 define('JPATH_CACHE',			JPATH_BASE.'/cache');
 define('JPATH_MANIFESTS',		JPATH_ADMINISTRATOR.'/manifests');
 
+/** JPATH_CONFIGURATION can be moved to hide the configuration.php file */
+define('JPATH_CONFIGURATION',	JPATH_ADMINISTRATOR);
+
 /** legacy/* */
 define('JPATH_LIBRARIES',		JPATH_ROOT.'/libraries');
 
 /** overrides */
-define('OVERRIDES_LIBRARY',		JPATH_ROOT.'/libraries/overrides');
+define('OVERRIDES_LIBRARY',		JPATH_ROOT.'/libraries/molajo/overrides');
 
 /** Configuration Fields **/
 define('MOLAJO_CONFIG_OPTION_ID_FIELDS', 1);

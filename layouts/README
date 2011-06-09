@@ -23,22 +23,23 @@ II. WHAT IS A MOLAJO LAYOUT?
 A Molajo Layout is a collection of files used to display output from Molajo Extensions. Layouts can be reused by any Component, Module, or Plugin.
 
 2. What is the structure of a Layout?
-Layouts are folders organized in the following:
+A Layout is a sest of files, contained within one folder.
+
+A typical Layout file structure is organized in the following way:
 
 layout-name
 ...css
-.....Molajo will load all files with a CSS extension that are stored in this subfolder.
+.....All files with a CSS extension are automatically loaded
 ...images
 .....Any images needed for the layout can be stored in the images subfolder.
 ...js
-.....Molajo will load all files with a JS extension that are stored in this subfolder.
+.....All files with a JS extension are automatically loaded
 ...language
 ... ... en-GB
-... ... ... en-GB.layouts.ini
-... ... ... en-GB.layouts.sys.ini
+... ... ... en-GB.layouts_layout_name.ini
+... ... ... en-GB.layouts_layout_name.sys.ini
 ... ... ... index.hmtl
 ...layouts
-... ... Molajo will load these file names and only these file names. Read "How does Molajo load Layout files?" for more.
 ... ... top.php
 ... ... header.php
 ... ... body.php
@@ -49,12 +50,12 @@ layout-name
 ... ... Amy - come back here
 ... ... name-of-file.xml
 ...index.html
-...item.xml Molajo uses this for installation and update. Read "How does Molajo install Layouts?" for more.
+...item.xml
 
 3. Where are Layouts located?
 
-Core Molajo Layouts are located on the root directory in the layouts folder.
-Layouts can also be a folder in the component/view/tmpl folder.
+Core Molajo Layouts are located on the root directory in the Layouts folder and can be used to display output from any Molajo Extension.
+Layouts can also be a folder in the component/view/tmpl folder, or within the modules/
 Layouts can also be located in the Templates/html/layouts folder.
 
 4. How can I override a core Layout?
@@ -63,18 +64,72 @@ To override a core Layout, you can place the Layout folder in the component/view
 The Template is the first place Molajo will look, then the Component, and finally, the Core Layouts folder.
 
 5. How can I create a Layout?
-To create a Layout use the Molajo Administrator Extension Manager-Create Menu Item.
+To create a Layout, navigate to the Molajo Administrator Extension Manager.
+Use the 'Create' Submenu Item.
 
-6. How does Molajo install Layouts?
+6. How can I install a Molajo Layout?
 To install a Molajo Layout someone shared with you, use the Molajo Administrator-Extension Manager
 
 7. How can I share my Layout with other Molajo users?
+xyz?
 
 
-II. WORKING WITH QUERY RESULTS
+II. HEAD AND PAGE INFORMATION
+1. Explain include/head.php
 
-1.
+2. Document
+meta, etc.
+
+3. Toolbar
+
+4. Submenu
+
+3. What Meta is automatically defined and how do I change it?
+
+4. How can I add Meta?
+
+5. Language files
+
+6. CSS and JS
+
+II. WORKING WITH MEDIA
+
+1. How do I add CSS for a Layout?
+
+2. How do I add JS to a Layout?
+
+3. How can I include images?
+
+4. Re-use
+
+III. WORKING WITH QUERY RESULTS IN LAYOUTS
+
+1. How are the layout files processed by Molajo?
+There are two options for using query results:
+A. To process the recordset within your layout file, include the custom.php layout file, but no other layout files.
+B. To allow Molajo to handle recordset process, the body.php file must be available.
+
+2. How does the Molajo View process the recordset and render the layout files?
+The Molajo View loops through each row, one at a time.
+The following layoutFolder/layouts/ files are included, if existing.
+
+A. Before any rows and if there is a top.php file:
+    * beforeDisplayContent output is rendered;
+    * the top.php file is included.
+
+B. Each row is processed one at a time, as follows:
+    * if there is a header.php file, it is included and event afterDisplayTitle output is rendered.
+    * if there is a body.php file, it is included.
+    * if there is a footer.php file, it is included.
+
+C. After all rows have been processed, and if there is a footer.php file:
+    * the footer.php file is included;
+    * afterDisplayContent output is rendered;
+
 2. What columns are available in the row for the layout?
+To display the columns available for each row, set Show Column Information to true in the Menu Item parameters,
+    or if you are rendering a layout in the Administrator, use the Component Options.
+    Once the parameter has been saved, refresh the page. The system information will be displayed on the page.
 
 3. How is a column value displayed in a layout?
 
@@ -82,7 +137,8 @@ II. WORKING WITH QUERY RESULTS
 
 No, the View will do this for you.
 
-II. STATE
+
+IV. STATE
 
 1. What is "state?"
 
@@ -90,7 +146,26 @@ II. STATE
 
 3. How can state values be used in a layout?
 
-III. WORKING WITH DATES
+
+V. PARAMETERS
+
+1. What are parameters?
+
+2. What parameters values are available within a layout?
+
+3. How can parameter values be used in a layout?
+
+4. How can I create or modify parameter sets?
+
+VI. LAYOUT OUTPUT
+
+1. Classes and IDs - Parameters, etc.
+
+2. Adding Semanatic Data
+
+3. HMTL5
+
+VII. WORKING WITH DATES
 
 1. What options are available for formatting dates in layouts?
 
@@ -118,3 +193,19 @@ DATE_FORMAT_JS1="y-m-d"
 
 4. How can I change the date formats for Joomla?
 Date formats can be changed by overriding the language file for your implementation.
+
+VIII. INTEGRATING WITH OTHER VIEW OUTPUT
+
+1. How can I render the output for another View?
+
+2. How can I feed the View properties for the given row?
+
+3. 
+
+IX. TEMPLATE SYSTEMS
+
+1. What does Molajo use as a default layout environemnt?
+
+2. How can I use Twig to render Molajo output?
+
+3. How can I add <insert name of your favorite Template System here> to render Molajo Output?

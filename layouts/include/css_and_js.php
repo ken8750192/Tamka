@@ -44,7 +44,7 @@ if ($this->state->get('layout.loadComponentCSS', true) === true) {
         $this->document->addStyleSheet(JURI::base().'/media/site/css/'.$this->state->get('request.option').'.css');
     }
 }
-    
+
 if ($this->state->get('layout.loadComponentJS', true) === true) {
     if (JFile::exists(JPATH_BASE.'/media/site/js/'.$this->state->get('request.option').'.js')) {
         $this->document->addScript(JURI::base().'media/site/js/'.$this->state->get('request.option').'.js');

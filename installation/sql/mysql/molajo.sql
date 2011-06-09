@@ -312,7 +312,6 @@ INSERT INTO `#__molajo_configuration` (`component_option`, `option_id`, `option_
 #
 # Table structure for table `#__assets`
 #
-
 CREATE TABLE IF NOT EXISTS `#__assets` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
   `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT 'Nested set parent.',
@@ -354,6 +353,26 @@ VALUES
 (21,1,37,38,1,'com_search','com_search','{}'),
 (22,1,39,40,1,'com_templates','com_templates','{}'),
 (23,1,41,42,1,'com_users','com_users','{}');
+
+--
+-- Table structure for table `#__asset_rules`
+--
+
+CREATE TABLE `#__asset_rules` (
+  `asset_id` int(10) unsigned NOT NULL COMMENT 'Asset ID Key',
+  `acl_key` varchar(100) NOT NULL COMMENT 'ACL KEY',
+  `group_id` int(10) unsigned NOT NULL COMMENT 'Group Key',
+  PRIMARY KEY (`asset_id`,`group_id`,`acl_key`),
+  UNIQUE KEY `idx_asset_acl_group_ids1` (`asset_id`,`group_id`,`acl_key`),
+  UNIQUE KEY `idx_asset_acl_group_ids2` (`group_id`,`asset_id`,`acl_key`)
+) DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `#__viewlevel_groups`
+--
+
+--INSERT INTO `#__asset_rules` VALUES(1, 1);
+
 
 #
 # Table structure for table `#__articles`
@@ -403,7 +422,7 @@ CREATE TABLE IF NOT EXISTS `#__articles` (
   `checked_out_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Checked out Date and Time',
 
   `asset_id` INTEGER UNSIGNED NOT NULL DEFAULT 0 COMMENT 'FK to the #__assets table.',
-  `access` INTEGER UNSIGNED NOT NULL DEFAULT 0 COMMENT 'View Level Access',
+  `access` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'View Level Access',
 
   `component_option` VARCHAR(50) NOT NULL COMMENT 'Component Option Value',
   `component_id` INT (11) NOT NULL COMMENT 'Primary Key for Component Content',
@@ -418,7 +437,7 @@ CREATE TABLE IF NOT EXISTS `#__articles` (
 
   `attribs` TEXT NULL COMMENT 'Attributes (Custom Fields)',
 
-  `params` TEXT NULL COMMENT 'Parameters (Content Detail Parameters)',
+  `params` MEDIUMTEXT NULL COMMENT 'Parameters (Content Detail Parameters)',
 
   PRIMARY KEY  (`id`),
 
@@ -488,8 +507,8 @@ CREATE TABLE `#__categories` (
   `published` tinyint(1) NOT NULL default '0',
   `checked_out` int(11) unsigned NOT NULL default '0',
   `checked_out_time` datetime NOT NULL default '0000-00-00 00:00:00',
-  `access` tinyint(3) unsigned NOT NULL default '0',
-  `params` TEXT NOT NULL,
+  `access` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'View Level Access',  
+  `params` MEDIUMTEXT NOT NULL,
   `metadesc` varchar(1024) NOT NULL COMMENT 'The meta description for the page.',
   `metakey` varchar(1024) NOT NULL COMMENT 'The meta keywords for the page.',
   `metadata` varchar(2048) NOT NULL COMMENT 'JSON encoded metadata properties.',
@@ -528,7 +547,7 @@ CREATE TABLE `#__extensions` (
   `folder` VARCHAR(100) NOT NULL,
   `client_id` TINYINT(3) NOT NULL,
   `enabled` TINYINT(3) NOT NULL DEFAULT '1',
-  `access` TINYINT(3) UNSIGNED NOT NULL DEFAULT '1',
+  `access` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'View Level Access',
   `protected` TINYINT(3) NOT NULL DEFAULT '0',
   `manifest_cache` TEXT  NOT NULL,
   `params` MEDIUMTEXT NOT NULL,
@@ -568,6 +587,7 @@ INSERT INTO `#__extensions` (`extension_id`, `name`, `type`, `element`, `folder`
 UPDATE `#__extensions`
 SET params = '{"config_component_tags":"1","config_component_tag_categories":"1","config_component_state_spam":"0","config_component_enable_comments":"1","config_component_version_management":"1","config_component_maintain_version_count":5,"config_component_retain_versions_after_delete":"1","config_component_uninstall":"1","config_component_single_item_parameter1":"item","config_component_single_item_parameter2":"0","config_component_single_item_parameter3":"0","config_component_single_item_parameter4":"0","config_component_single_item_parameter5":"0","config_component_candy_editor_parameter1":"item","config_component_candy_editor_parameter2":"0","config_component_candy_editor_parameter3":"0","config_component_candy_editor_parameter4":"0","config_component_candy_editor_parameter5":"0","config_component_candy_default_parameter1":"item","config_component_candy_default_parameter2":"0","config_component_candy_default_parameter3":"0","config_component_candy_default_parameter4":"0","config_component_candy_default_parameter5":"0","config_component_land_blog_parameter1":"category","config_component_land_blog_parameter2":"blog","config_component_land_blog_parameter3":"item","config_component_land_blog_parameter4":"integration","config_component_land_blog_parameter5":"0","config_component_land_default_parameter1":"category","config_component_land_default_parameter2":"list","config_component_land_default_parameter3":"item","config_component_land_default_parameter4":"integration","config_component_land_default_parameter5":"0","config_manager_title":"1","config_manager_button_bar_option1":"new","config_manager_button_bar_option2":"edit","config_manager_button_bar_option3":"checkin","config_manager_button_bar_option4":"separator","config_manager_button_bar_option5":"publish","config_manager_button_bar_option6":"unpublish","config_manager_button_bar_option7":"feature","config_manager_button_bar_option8":"sticky","config_manager_button_bar_option9":"archive","config_manager_button_bar_option10":"separator","config_manager_button_bar_option11":"spam","config_manager_button_bar_option12":"trash","config_manager_button_bar_option13":"delete","config_manager_button_bar_option14":"restore","config_manager_button_bar_option15":"separator","config_manager_button_bar_option16":"options","config_manager_button_bar_option17":"separator","config_manager_button_bar_option18":"help","config_manager_button_bar_option19":"0","config_manager_button_bar_option20":"0","config_manager_sub_menu_for_content_types":"0","config_manager_sub_menu1":"default","config_manager_sub_menu2":"category","config_manager_sub_menu3":"featured","config_manager_sub_menu4":"revisions","config_manager_sub_menu5":"0","config_manager_list_search":"1","config_manager_list_filters1":"catid","config_manager_list_filters2":"state","config_manager_list_filters3":"featured","config_manager_list_filters4":"created_by","config_manager_list_filters5":"access","config_manager_list_filters6":"0","config_manager_list_filters7":"0","config_manager_list_filters8":"0","config_manager_list_filters9":"0","config_manager_list_filters10":"0","config_manager_list_filters_query_filters1":"access","config_manager_list_filters_query_filters2":"catid","config_manager_list_filters_query_filters3":"created_by","config_manager_list_filters_query_filters4":"0","config_manager_list_filters_query_filters5":"0","config_manager_grid_column_display_alias":"1","config_manager_grid_column1":"id","config_manager_grid_column2":"title","config_manager_grid_column3":"created_by","config_manager_grid_column4":"state","config_manager_grid_column5":"publish_up","config_manager_grid_column6":"publish_down","config_manager_grid_column7":"featured","config_manager_grid_column8":"stickied","config_manager_grid_column9":"catid","config_manager_grid_column10":"ordering","config_manager_grid_column11":"0","config_manager_grid_column12":"0","config_manager_grid_column13":"0","config_manager_grid_column14":"0","config_manager_grid_column15":"0","config_manager_editor_button_bar_new_option1":"apply","config_manager_editor_button_bar_new_option2":"save","config_manager_editor_button_bar_new_option3":"save2new","config_manager_editor_button_bar_new_option4":"close","config_manager_editor_button_bar_new_option5":"help","config_manager_editor_button_bar_new_option6":"0","config_manager_editor_button_bar_new_option7":"0","config_manager_editor_button_bar_new_option8":"0","config_manager_editor_button_bar_new_option9":"0","config_manager_editor_button_bar_new_option10":"0","config_manager_editor_button_bar_edit_option1":"save","config_manager_editor_button_bar_edit_option2":"0","config_manager_editor_button_bar_edit_option3":"save2new","config_manager_editor_button_bar_edit_option4":"save2copy","config_manager_editor_button_bar_edit_option5":"close","config_manager_editor_button_bar_edit_option6":"help","config_manager_editor_button_bar_edit_option7":"0","config_manager_editor_button_bar_edit_option8":"0","config_manager_editor_button_bar_edit_option9":"0","config_manager_editor_button_bar_edit_option10":"0","config_manager_editor_buttons1":"article","config_manager_editor_buttons2":"image","config_manager_editor_buttons3":"pagebreak","config_manager_editor_buttons4":"readmore","config_manager_editor_buttons5":"audio","config_manager_editor_buttons6":"video","config_manager_editor_buttons7":"file","config_manager_editor_buttons8":"gallery","config_manager_editor_buttons9":"0","config_manager_editor_buttons10":"0","config_manager_editor_left_top_column1":"title","config_manager_editor_left_top_column2":"alias","config_manager_editor_left_top_column3":"id","config_manager_editor_left_top_column4":"0","config_manager_editor_left_top_column5":"0","config_manager_editor_left_top_column6":"0","config_manager_editor_left_top_column7":"0","config_manager_editor_left_top_column8":"0","config_manager_editor_left_top_column9":"0","config_manager_editor_left_top_column10":"0","config_manager_editor_primary_column1":"content_text","config_manager_editor_left_bottom_column1":"catid","config_manager_editor_left_bottom_column2":"featured","config_manager_editor_left_bottom_column3":"stickied","config_manager_editor_left_bottom_column4":"language","config_manager_editor_left_bottom_column5":"0","config_manager_editor_right_publishing_column1":"state","config_manager_editor_right_publishing_column2":"created_by","config_manager_editor_right_publishing_column3":"created_by_alias","config_manager_editor_right_publishing_column4":"created","config_manager_editor_right_publishing_column5":"publish_up","config_manager_editor_right_publishing_column6":"publish_down","config_manager_editor_right_publishing_column7":"0","config_manager_editor_right_publishing_column8":"0","config_manager_editor_right_publishing_column9":"0","config_manager_editor_right_publishing_column10":"0","config_manager_editor_attribs":"1","config_manager_editor_params":"1","config_manager_editor_metadata":"1","params":{"show_title":"","link_titles":"","show_intro":"","show_category":"","link_category":"","show_parent_category":"","link_parent_category":"","show_author":"","link_author":"","show_create_date":"","show_modify_date":"","show_publish_date":"","show_item_navigation":"","show_vote":"","show_icons":"","show_print_icon":"","show_email_icon":"","show_hits":"","show_noauth":"","show_category_title":"","show_description":"","show_description_image":"","maxLevel":"","show_empty_categories":"","show_no_articles":"","show_subcat_desc":"","show_cat_num_articles":"","num_leading_articles":"1","num_intro_articles":"4","num_columns":"2","num_links":"3","multi_column_order":"1","show_subcategory_content":"","orderby_pri":"","orderby_sec":"","order_date":"","show_pagination":"","show_pagination_results":"","show_feed_link":"","feed_summary":"","show_pagination_limit":"","filter_field":"","show_headings":"","list_show_date":"","date_format":"","list_show_hits":"","list_show_author":"","display_num":"10"}}'
 WHERE element = 'COM_ARTICLES';
+
 UPDATE `#__extensions`
 SET params = '{"config_component_tags":"1","config_component_tag_categories":"1","config_component_state_spam":"0","config_component_enable_comments":"1","config_component_version_management":"1","config_component_maintain_version_count":5,"config_component_retain_versions_after_delete":"1","config_component_uninstall":"1","config_component_single_item_parameter1":"item","config_component_single_item_parameter2":"0","config_component_single_item_parameter3":"0","config_component_single_item_parameter4":"0","config_component_single_item_parameter5":"0","config_component_candy_editor_parameter1":"item","config_component_candy_editor_parameter2":"0","config_component_candy_editor_parameter3":"0","config_component_candy_editor_parameter4":"0","config_component_candy_editor_parameter5":"0","config_component_candy_default_parameter1":"item","config_component_candy_default_parameter2":"0","config_component_candy_default_parameter3":"0","config_component_candy_default_parameter4":"0","config_component_candy_default_parameter5":"0","config_component_land_blog_parameter1":"category","config_component_land_blog_parameter2":"blog","config_component_land_blog_parameter3":"item","config_component_land_blog_parameter4":"integration","config_component_land_blog_parameter5":"0","config_component_land_default_parameter1":"category","config_component_land_default_parameter2":"list","config_component_land_default_parameter3":"item","config_component_land_default_parameter4":"integration","config_component_land_default_parameter5":"0","config_manager_title":"1","config_manager_button_bar_option1":"new","config_manager_button_bar_option2":"edit","config_manager_button_bar_option3":"checkin","config_manager_button_bar_option4":"separator","config_manager_button_bar_option5":"publish","config_manager_button_bar_option6":"unpublish","config_manager_button_bar_option7":"feature","config_manager_button_bar_option8":"sticky","config_manager_button_bar_option9":"archive","config_manager_button_bar_option10":"separator","config_manager_button_bar_option11":"spam","config_manager_button_bar_option12":"trash","config_manager_button_bar_option13":"delete","config_manager_button_bar_option14":"restore","config_manager_button_bar_option15":"separator","config_manager_button_bar_option16":"options","config_manager_button_bar_option17":"separator","config_manager_button_bar_option18":"help","config_manager_button_bar_option19":"0","config_manager_button_bar_option20":"0","config_manager_sub_menu_for_content_types":"0","config_manager_sub_menu1":"default","config_manager_sub_menu2":"category","config_manager_sub_menu3":"featured","config_manager_sub_menu4":"revisions","config_manager_sub_menu5":"0","config_manager_list_search":"1","config_manager_list_filters1":"catid","config_manager_list_filters2":"state","config_manager_list_filters3":"featured","config_manager_list_filters4":"created_by","config_manager_list_filters5":"access","config_manager_list_filters6":"0","config_manager_list_filters7":"0","config_manager_list_filters8":"0","config_manager_list_filters9":"0","config_manager_list_filters10":"0","config_manager_list_filters_query_filters1":"access","config_manager_list_filters_query_filters2":"catid","config_manager_list_filters_query_filters3":"created_by","config_manager_list_filters_query_filters4":"0","config_manager_list_filters_query_filters5":"0","config_manager_grid_column_display_alias":"1","config_manager_grid_column1":"id","config_manager_grid_column2":"title","config_manager_grid_column3":"created_by","config_manager_grid_column4":"state","config_manager_grid_column5":"publish_up","config_manager_grid_column6":"publish_down","config_manager_grid_column7":"featured","config_manager_grid_column8":"stickied","config_manager_grid_column9":"catid","config_manager_grid_column10":"ordering","config_manager_grid_column11":"0","config_manager_grid_column12":"0","config_manager_grid_column13":"0","config_manager_grid_column14":"0","config_manager_grid_column15":"0","config_manager_editor_button_bar_new_option1":"apply","config_manager_editor_button_bar_new_option2":"save","config_manager_editor_button_bar_new_option3":"save2new","config_manager_editor_button_bar_new_option4":"close","config_manager_editor_button_bar_new_option5":"help","config_manager_editor_button_bar_new_option6":"0","config_manager_editor_button_bar_new_option7":"0","config_manager_editor_button_bar_new_option8":"0","config_manager_editor_button_bar_new_option9":"0","config_manager_editor_button_bar_new_option10":"0","config_manager_editor_button_bar_edit_option1":"save","config_manager_editor_button_bar_edit_option2":"0","config_manager_editor_button_bar_edit_option3":"save2new","config_manager_editor_button_bar_edit_option4":"save2copy","config_manager_editor_button_bar_edit_option5":"close","config_manager_editor_button_bar_edit_option6":"help","config_manager_editor_button_bar_edit_option7":"0","config_manager_editor_button_bar_edit_option8":"0","config_manager_editor_button_bar_edit_option9":"0","config_manager_editor_button_bar_edit_option10":"0","config_manager_editor_buttons1":"article","config_manager_editor_buttons2":"image","config_manager_editor_buttons3":"pagebreak","config_manager_editor_buttons4":"readmore","config_manager_editor_buttons5":"audio","config_manager_editor_buttons6":"video","config_manager_editor_buttons7":"file","config_manager_editor_buttons8":"gallery","config_manager_editor_buttons9":"0","config_manager_editor_buttons10":"0","config_manager_editor_left_top_column1":"title","config_manager_editor_left_top_column2":"alias","config_manager_editor_left_top_column3":"id","config_manager_editor_left_top_column4":"0","config_manager_editor_left_top_column5":"0","config_manager_editor_left_top_column6":"0","config_manager_editor_left_top_column7":"0","config_manager_editor_left_top_column8":"0","config_manager_editor_left_top_column9":"0","config_manager_editor_left_top_column10":"0","config_manager_editor_primary_column1":"content_text","config_manager_editor_left_bottom_column1":"catid","config_manager_editor_left_bottom_column2":"featured","config_manager_editor_left_bottom_column3":"stickied","config_manager_editor_left_bottom_column4":"language","config_manager_editor_left_bottom_column5":"0","config_manager_editor_right_publishing_column1":"state","config_manager_editor_right_publishing_column2":"created_by","config_manager_editor_right_publishing_column3":"created_by_alias","config_manager_editor_right_publishing_column4":"created","config_manager_editor_right_publishing_column5":"publish_up","config_manager_editor_right_publishing_column6":"publish_down","config_manager_editor_right_publishing_column7":"0","config_manager_editor_right_publishing_column8":"0","config_manager_editor_right_publishing_column9":"0","config_manager_editor_right_publishing_column10":"0","config_manager_editor_attribs":"1","config_manager_editor_params":"1","config_manager_editor_metadata":"1","params":{"show_title":"","link_titles":"","show_intro":"","show_category":"","link_category":"","show_parent_category":"","link_parent_category":"","show_author":"","link_author":"","show_create_date":"","show_modify_date":"","show_publish_date":"","show_item_navigation":"","show_vote":"","show_icons":"","show_print_icon":"","show_email_icon":"","show_hits":"","show_noauth":"","show_category_title":"","show_description":"","show_description_image":"","maxLevel":"","show_empty_categories":"","show_no_articles":"","show_subcat_desc":"","show_cat_num_articles":"","num_leading_articles":"1","num_intro_articles":"4","num_columns":"2","num_links":"3","multi_column_order":"1","show_subcategory_content":"","orderby_pri":"","orderby_sec":"","order_date":"","show_pagination":"","show_pagination_results":"","show_feed_link":"","feed_summary":"","show_pagination_limit":"","filter_field":"","show_headings":"","list_show_date":"","date_format":"","list_show_hits":"","list_show_author":"","display_num":"10"}}'
 WHERE element = 'COM_MEDIA';
@@ -742,7 +762,7 @@ CREATE TABLE IF NOT EXISTS `#__media` (
   `checked_out_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Checked out Date and Time',
 
   `asset_id` INTEGER UNSIGNED NOT NULL DEFAULT 0 COMMENT 'FK to the #__assets table.',
-  `access` INTEGER UNSIGNED NOT NULL DEFAULT 0 COMMENT 'View Level Access',
+  `access` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'View Level Access',
 
   `component_option` VARCHAR(50) NOT NULL COMMENT 'Component Option Value',
   `component_id` INT (11) NOT NULL COMMENT 'Primary Key for Component Content',
@@ -757,7 +777,7 @@ CREATE TABLE IF NOT EXISTS `#__media` (
 
   `attribs` TEXT NULL COMMENT 'Attributes (Custom Fields)',
 
-  `params` TEXT NULL COMMENT 'Parameters (Content Detail Parameters)',
+  `params` MEDIUMTEXT NULL COMMENT 'Parameters (Content Detail Parameters)',
 
   PRIMARY KEY  (`id`),
 
@@ -825,7 +845,7 @@ CREATE TABLE `#__menu` (
   `checked_out` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'FK to #__users.id',
   `checked_out_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'The time the menu item was checked out.',
   `browserNav` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'The click behaviour of the link.',
-  `access` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'The access level required to view the menu item.',
+  `access` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'View Level Access',
   `img` varchar(255) NOT NULL COMMENT 'The image of the menu item.',
   `template_style_id` int(10) unsigned NOT NULL DEFAULT '0',
   `params` MEDIUMTEXT NOT NULL COMMENT 'JSON encoded data for the menu item.',
@@ -917,9 +937,9 @@ CREATE TABLE `#__modules` (
   `publish_down` datetime NOT NULL default '0000-00-00 00:00:00',
   `published` tinyint(1) NOT NULL DEFAULT '0',
   `module` varchar(50) DEFAULT NULL,
-  `access` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `access` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'View Level Access',
   `showtitle` tinyint(3) unsigned NOT NULL DEFAULT '1',
-  `params` TEXT NOT NULL,
+  `params` MEDIUMTEXT NOT NULL,
   `client_id` tinyint(4) NOT NULL DEFAULT '0',
   `language` char(7) NOT NULL,
   PRIMARY KEY  (`id`),
@@ -1010,6 +1030,15 @@ CREATE TABLE `#__session` (
   KEY `time` (`time`)
 )  DEFAULT CHARSET=utf8;
 
+# User Profiles
+
+CREATE TABLE `#__user_profiles` (
+  `user_id` int(11) NOT NULL,
+  `profile_key` varchar(100) NOT NULL,
+  `profile_value` varchar(255) NOT NULL,
+  `ordering` int(11) NOT NULL DEFAULT '0',
+  UNIQUE KEY `idx_user_id_profile_key` (`user_id`,`profile_key`)
+)  DEFAULT CHARSET=utf8;
 
 # -------------------------------------------------------
 
@@ -1065,7 +1094,7 @@ CREATE TABLE IF NOT EXISTS `#__template_styles` (
   `client_id` tinyint(1) unsigned NOT NULL DEFAULT 0,
   `home` char(7) NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `params` TEXT NOT NULL,
+  `params` MEDIUMTEXT NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `idx_template` (`template`),
   KEY `idx_home` (`home`)
@@ -1130,7 +1159,7 @@ CREATE TABLE `#__users` (
   `registerDate` datetime NOT NULL default '0000-00-00 00:00:00',
   `lastvisitDate` datetime NOT NULL default '0000-00-00 00:00:00',
   `activation` varchar(100) NOT NULL default '',
-  `params` text NOT NULL,
+  `params` MEDIUMTEXT NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `usertype` (`usertype`),
   KEY `idx_name` (`name`),
@@ -1142,7 +1171,6 @@ CREATE TABLE `#__users` (
 #
 # Table structure for table `#__viewlevels`
 #
-
 CREATE TABLE IF NOT EXISTS `#__viewlevels` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
   `title` varchar(100) NOT NULL DEFAULT '',
@@ -1160,4 +1188,27 @@ INSERT INTO `#__viewlevels` (`id`, `title`, `ordering`, `rules`) VALUES
 (1, 'Public', 1, '[1]'),
 (2, 'Guest', 2, '[2]'),
 (3, 'Registered', 3, '[3,4]'),
-(4, 'Special', 4, '[4]');
+(4, 'Administrator', 4, '[4]');
+
+
+--
+-- Table structure for table `#__viewlevel_groups`
+--
+
+CREATE TABLE `#__viewlevel_groups` (
+  `viewlevel_id` int(10) unsigned NOT NULL COMMENT 'Viewlevel Key',
+  `group_id` int(10) unsigned NOT NULL COMMENT 'Group Key',
+  PRIMARY KEY (`viewlevel_id`,`group_id`),
+  UNIQUE KEY `idx_viewlevel_group_ids1` (`group_id`,`viewlevel_id`),
+  UNIQUE KEY `idx_viewlevel_group_ids2` (`viewlevel_id`,`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `#__viewlevel_groups`
+--
+
+INSERT INTO `#__viewlevel_groups` VALUES(1, 1);
+INSERT INTO `#__viewlevel_groups` VALUES(2, 2);
+INSERT INTO `#__viewlevel_groups` VALUES(3, 3);
+INSERT INTO `#__viewlevel_groups` VALUES(3, 4);
+INSERT INTO `#__viewlevel_groups` VALUES(4, 4);

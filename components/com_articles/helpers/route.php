@@ -49,7 +49,7 @@ class ArticlesRouteHelper
      */
 	public function getArticleRoute ($id, $catid, $data)
     {
-        $routeHelper = new MolajoRouteHelper ();
+        $routeHelper = new MolajoRouter ();
         return $routeHelper->getItemRoute($id, $catid, $data, $this->singleItemParam, $this->typeParam, $this->componentOptionParam);
     }
 
@@ -62,7 +62,7 @@ class ArticlesRouteHelper
      */
 	public function getCategoryRoute($data, $catid)
     {
-        $routeHelper = new MolajoRouteHelper ();
+        $routeHelper = new MolajoRouter ();
         return $routeHelper->getCategoryRoute($data, $catid, $this->singleItemParam, $this->typeParam, $this->componentOptionParam);
     }
 
@@ -76,7 +76,7 @@ class ArticlesRouteHelper
      */
 	public function getFormRoute($data, $catid, $id)
     {
-        $routeHelper = new MolajoRouteHelper ();
+        $routeHelper = new MolajoRouter ();
         return $routeHelper->getFormRoute($data, $catid, $id, $this->singleItemParam, $this->typeParam, $this->componentOptionParam);
     }
 }

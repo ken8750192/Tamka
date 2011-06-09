@@ -281,7 +281,7 @@ class MenusModelMenu extends JModelForm
 	 * @since	1.6
 	 */
 	function cleanCache() {
-		parent::cleanCache('com_modules');
-		parent::cleanCache('mod_menu');
+//		parent::cleanCache('com_modules');
+//		parent::cleanCache('mod_menu');
 	}
 }

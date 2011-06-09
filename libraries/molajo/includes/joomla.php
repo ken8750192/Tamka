@@ -6,7 +6,7 @@
  * @copyright   Copyright (C) 2011 Amy Stephen. All rights reserved.
  * @license     GNU General Public License Version 2, or later http://www.gnu.org/licenses/gpl.html
  */
-defined('MOLAJO') or die;
+defined('MOLAJO') or die();
 
 /** php overrides */
 @ini_set('magic_quotes_runtime', 0);
@@ -95,14 +95,16 @@ if (MOLAJO_APPLICATION == 'installation') {
 }
 
 /** joomla library: core and overrides */
-jimport('joomla.application.menu');
-jimport('overrides.user.user');
+/** access */
+jimport('molajo.user.user');
+jimport('molajo.overrides.user.user');
 jimport('joomla.environment.uri');
 jimport('joomla.html.html');
 jimport('joomla.utilities.utility');
 jimport('joomla.event.event');
 jimport('joomla.event.dispatcher');
 jimport('joomla.language.language');
+jimport('joomla.language.helper');
 jimport('joomla.utilities.string');
 jimport('joomla.utilities.date');
 
@@ -118,30 +120,45 @@ JLoader::register('JCacheStorage', JPATH_PLATFORM.'/joomla/cache/storage.php');
 jimport('joomla.filesystem.file');
 jimport('joomla.filesystem.folder');
 
-/** access */
-jimport('overrides.access.access');
-
-/** application */
-jimport('overrides.application.component.controller');
-jimport('overrides.application.component.view');
-jimport('overrides.application.component.model');
-jimport('overrides.application.component.helper');
-jimport('overrides.application.module.helper');
-jimport('overrides.application.helper');
-jimport('overrides.application.categories');
-jimport('overrides.application.router');
-
 /** database */
 jimport('joomla.database');
-JLoader::register('JTable', JPATH_PLATFORM.'/joomla/database/table.php');
-jimport('overrides.database.table.user');
-jimport('overrides.database.table.usergroup');
-jimport('overrides.database.table.viewlevel');
+jimport('molajo.table.table');
+jimport('molajo.overrides.database.table');
+jimport('molajo.table.user');
+jimport('molajo.overrides.database.table.user');
+jimport('molajo.table.usergroup');
+jimport('molajo.overrides.database.table.usergroup');
+jimport('molajo.table.viewlevel');
+jimport('molajo.overrides.database.table.viewlevel');
+
+/** file helper */
+if (class_exists('MolajoFileHelper')) {
+} else {
+    if (file_exists(MOLAJO_LIBRARY.'/helpers/file.php')) {
+        JLoader::register('MolajoFileHelper', MOLAJO_LIBRARY.'/helpers/file.php');
+    } else {
+        JError::raiseNotice(500, JText::_('MOLAJO_OVERRIDE_CREATE_MISSING_CLASS_FILE'.' '.'MolajoFileHelper'));
+        return;
+    }
+}
+$filehelper = new MolajoFileHelper();
+
+/** Helpers */
+$files = JFolder::files(MOLAJO_LIBRARY.'/helpers', '\.php$', false, false);
+foreach ($files as $file) {
+    $filehelper->requireClassFile(MOLAJO_LIBRARY.'/helpers/'.$file, 'Molajo'.ucfirst(substr($file, 0, strpos($file, '.'))).'Helper');
+}
+jimport('molajo.overrides.application.component.helper');
+jimport('molajo.overrides.application.module.helper');
+jimport('molajo.overrides.application.categories');
+jimport('molajo.overrides.application.helper');
+jimport('molajo.overrides.plugin.helper');
+jimport('molajo.overrides.user.helper');
 
 /** HTML */
-jimport('overrides.html.pagination');
-jimport('overrides.html.toolbar');
-jimport('overrides.html.editor');
+jimport('molajo.overrides.html.pagination');
+jimport('molajo.overrides.html.toolbar');
+jimport('molajo.overrides.html.editor');
 
 /** Form */
 jimport('joomla.form.form');
@@ -155,10 +172,19 @@ jimport('joomla.registry.registry');
 
 /** Plugins */
 jimport('joomla.plugin.plugin');
-jimport('overrides.plugin.helper');
 
-/** User */
-jimport('overrides.user.helper');
+/** ACL */
+jimport('molajo.acl.legacy.access');
+jimport('molajo.overrides.access.access');
+jimport('molajo.acl.legacy.rule');
+jimport('molajo.overrides.access.rule');
+jimport('molajo.acl.legacy.rules');
+jimport('molajo.overrides.access.rules');
+
+/** menu */
+jimport('molajo.menu.menu');
+jimport('molajo.overrides.application.menu');
+
 /** toolbar */
 if (MOLAJO_APPLICATION == 'administrator') {
     require_once JPATH_BASE.'/includes/helper.php';
@@ -198,3 +224,16 @@ $files = JFolder::files(OVERRIDES_LIBRARY.'/html/toolbar/button', '\.php$', fals
 foreach ($files as $file) {
     $filehelper->requireClassFile(OVERRIDES_LIBRARY.'/html/toolbar/button/', 'JButton'.ucfirst(substr($file, 0, strpos($file, '.'))));
 }
+
+/** application */
+jimport('joomla.application.component.controller');
+jimport('joomla.application.component.controlleradmin');
+jimport('joomla.application.component.controllerform');
+jimport('joomla.application.component.model');
+jimport('joomla.application.component.modeladmin');
+jimport('joomla.application.component.modelform');
+jimport('joomla.application.component.modelitem');
+jimport('joomla.application.component.modellist');
+jimport('joomla.application.component.view');
+jimport('joomla.application.pathway');
+jimport('joomla.application.router');

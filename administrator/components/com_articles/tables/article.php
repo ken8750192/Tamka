@@ -15,4 +15,4 @@ defined('MOLAJO') or die;
  * @subpackage	Table
  * @since	1.6
  */
-class ArticlesTableArticle extends MolajoTable {}
+class ArticlesTableArticle extends MolajoTableContent {}

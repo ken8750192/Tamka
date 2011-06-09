@@ -454,19 +454,6 @@ abstract class JModel extends JObject
 	protected function cleanCache($group = null, $client_id = 0)
 	{
 		// Initialise variables;
-		$conf = JFactory::getConfig();
-		$dispatcher = JDispatcher::getInstance();
 
-		$options = array(
-			'defaultgroup' 	=> ($group) 	? $group : (isset($this->option) ? $this->option : JRequest::getCmd('option')),
-			'cachebase'		=> ($client_id) ? JPATH_ADMINISTRATOR.DS.'cache' : $conf->get('cache_path', JPATH_SITE.DS.'cache')
-		);
-
-		jimport('joomla.cache.cache');
-		$cache = JCache::getInstance('callback', $options);
-		$cache->clean();
-
-		// Trigger the onContentCleanCache event.
-		$dispatcher->trigger($this->event_clean_cache, $options);
 	}
 }

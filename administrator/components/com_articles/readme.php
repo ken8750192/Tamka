@@ -12,9 +12,9 @@ http://www.symfonyreference.com/generator-yml
 Assumptions for Administrator Component:
 
 1. Deploying Row Level ACL
-2. Update only one Table using a primary key name of id
-3. Two Views: plural and single
-4. Two Layouts: default and edit
+2. Update only one Table which has a primary key named id
+3. Two Views: display and edit
+4. Two Layouts: manager and edit (for editing and creating content)
 5. Uses categories
 6. Configuration file
 

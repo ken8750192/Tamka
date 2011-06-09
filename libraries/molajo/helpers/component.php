@@ -29,13 +29,14 @@ class MolajoComponentHelper
 	 * Get the component information.
 	 *
 	 * @param	string	$option	The component option.
-	 * @param	boolean	$string	If set and a component does not exist, the enabled attribue will be set to false
+	 * @param	boolean	$string	If set and a component does not exist, the enabled attribute will be set to false
 	 *
 	 * @return	object	An object with the fields for the component.
 	 * @since	1.5
 	 */
 	public static function getComponent($option, $strict = false)
 	{
+        // return $router->buildRoute(&$query, 'com_articles', 'article', 'articles', 'Article', '#__articles');
 		if (!isset(self::$_components[$option])) {
 			if (self::_load($option)){
 				$result = self::$_components[$option];
@@ -152,7 +153,7 @@ class MolajoComponentHelper
 		ob_end_clean();
 
 		// Build the component toolbar
-		jimport('joomla.application.helper');
+//als jimport('joomla.application.helper');
 
 		if (($path = JApplicationHelper::getPath('toolbar')) && $app->isAdmin()) {
 			// Get the task again, in case it has changed

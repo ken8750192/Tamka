@@ -14,7 +14,7 @@ define('MOLAJO_APPLICATION', 'administrator');
  * JPATH_ROOT is the root path for the Joomla install regardless of BASE
  *
  */
-define('MOLAJO', 1);
+define('MOLAJO', 'molajo');
 define('DS', DIRECTORY_SEPARATOR);
 
 /** Override defines.php for client in current folder */
